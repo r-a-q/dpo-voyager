@@ -92,10 +92,10 @@ export default class AnnotationOverlay extends Popup
     protected render()
     {
         return html`
-        <div class="sv-help-region" id="anno_container" role="region" @wheel=${(e) => this.discardEvents(e)} @pointerdown=${(e) => this.discardEvents(e)} aria-label="Annotation pop-up" aria-live="polite" aria-atomic="true" @keydown=${e =>this.onKeyDownMain(e)}>
+        <div class="sv-help-region" id="anno_container" role="region" @wheel=${(e) => this.discardEvents(e)} @pointerdown=${(e) => this.discardEvents(e)} aria-label=${languageManager.getLocalizedString("Annotation pop-up")} aria-live="polite" aria-atomic="true" @keydown=${e =>this.onKeyDownMain(e)}>
             <div class="ff-flex-row">
                 <div id="ovr_title" class="ff-flex-spacer ff-title"><b>${this.title}</b></div>
-                <ff-button icon="close" transparent class="ff-close-button" title="Close" @click=${this.close}></ff-button>
+                <ff-button icon="close" transparent class="ff-close-button" title=${languageManager.getLocalizedString("Close")} @click=${this.close}></ff-button>
             </div>
         </div>
         `;

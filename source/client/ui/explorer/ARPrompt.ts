@@ -46,7 +46,7 @@ export default class ARPrompt extends DocumentView
         return !outs.isPlaced.value && outs.isPresenting.value ? html`<div class="sv-ar-prompt">
                 <div class="sv-content">
                     <div><ff-icon class="ff-off ff-icon sv-ar-icon" name="device-move"}></ff-icon></div>
-                    Point your device at ${location} and move it around to place your Smithsonian object!<br><br>**BETA**
+                    ${languageManager.getLocalizedString(`Point your device at ${location} and move it around to place your Smithsonian object`)}!<br><br>**${languageManager.getLocalizedString("BETA")}**
                 </div>
             </div>` : null;
     }

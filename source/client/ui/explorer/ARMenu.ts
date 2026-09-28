@@ -82,9 +82,9 @@ export default class ARMenu extends DocumentView
         const tagCloudVisible = setup.viewer.ins.annotationsVisible.value && setup.viewer.outs.tagCloud.value;
 
         return outs.isPlaced.value && outs.isPresenting.value ? html`<div class="sv-ar-menu">
-        ${narrationButtonVisible ? html`<ff-button icon="audio" title=${"Play Audio Narration"}
+        ${narrationButtonVisible ? html`<ff-button icon="audio" title=${languageManager.getLocalizedString("Play Audio Narration")}
             ?selected=${narrationActive} @click=${this.onToggleNarration}></ff-button>` : null}
-        ${annotationsButtonVisible ? html`<ff-button icon="comment" title="Show/Hide Annotations"
+        ${annotationsButtonVisible ? html`<ff-button icon="comment" title=${languageManager.getLocalizedString("Show/Hide Annotations")}
             ?selected=${annotationsActive} @click=${this.onToggleAnnotations}></ff-button>` : null}
         ${tagCloudVisible ? html`<sv-tag-cloud .system=${this.system}></sv-tag-cloud>` : null}
         </div>` : null;

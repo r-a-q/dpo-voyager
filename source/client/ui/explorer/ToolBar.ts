@@ -77,7 +77,7 @@ export default class ToolBar extends SystemView
                 ?selected=${tool === activeTool} @click=${e => this.onSelectTool(tool)}></ff-button>` : null);
 
         return html`<div class="sv-blue-bar"><div id="toolmenu" role="region" aria-label=${activeTool ? activeTool.text : null} @close=${this.closeTool} @keydown=${e =>this.onKeyDownTool(e)}>${activeTool ? activeTool.createView() : null}</div>
-            <div id="mainmenu" role="region" @keydown=${e =>this.onKeyDownMain(e)} aria-label="Tools and settings" class="sv-section">
+            <div id="mainmenu" role="region" @keydown=${e =>this.onKeyDownMain(e)} aria-label=${language.getLocalizedString("Tools and settings")} class="sv-section">
                 <ff-button class="sv-section-lead" transparent icon="close" title=${language.getLocalizedString("Close Tools")} @click=${this.onClose}></ff-button>
                 <div class="sv-tool-buttons">${toolButtons}</div>
                 <sv-tool-menu-view .system=${this.system}></sv-tool-menu-view>

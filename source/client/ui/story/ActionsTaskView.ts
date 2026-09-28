@@ -26,6 +26,7 @@ import List from "client/../../libs/ff-ui/source/List";
 import { EActionPlayStyle, EActionTrigger, EActionType, IAction, IAudioClip, TActionType } from "client/schema/meta";
 //import Notification from "@ff/ui/Notification";
 import CVAnnotationView from "client/components/CVAnnotationView";
+import CVLanguageManager from "client/components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -55,8 +56,12 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
         const node = this.activeNode;
         const actionList = node && node.hasComponent(CVAnnotationView) && this.task.actions;
 
+        //RAQ - added language manager to get localized string for text 
+        const languageManager = this.activeDocument.setup.language;
+
         if (!actionList) {
-            return html`<div class="sv-placeholder">Please select a model node to edit its actions.</div>`;
+            //RAQ - added language translator
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please select a model node to edit its actions.")}</div>`;
         }
 
         const accessibilityNotice = ins.type.value === EActionType.PlayAudio && 

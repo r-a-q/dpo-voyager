@@ -68,17 +68,17 @@ export default class ToolBar extends SystemView
     {
         const tools = this.toolProvider.scopedComponents;
         const activeTool = this.toolProvider.activeComponent;
-        const language = this.setup.language;
+        const languageManager = this.setup.language;
 
         const toolbarWrapper = activeTool ? html`<div>`: null;
 
         const toolButtons = tools.map(tool => tool.enabled ?
-            html`<ff-button class="sv-tool-button" transparent text=${language.getLocalizedString(tool.text)} icon=${tool.icon}
+            html`<ff-button class="sv-tool-button" transparent text=${languageManager.getLocalizedString(tool.text)} icon=${tool.icon}
                 ?selected=${tool === activeTool} @click=${e => this.onSelectTool(tool)}></ff-button>` : null);
 
         return html`<div class="sv-blue-bar"><div id="toolmenu" role="region" aria-label=${activeTool ? activeTool.text : null} @close=${this.closeTool} @keydown=${e =>this.onKeyDownTool(e)}>${activeTool ? activeTool.createView() : null}</div>
-            <div id="mainmenu" role="region" @keydown=${e =>this.onKeyDownMain(e)} aria-label="Tools and settings" class="sv-section">
-                <ff-button class="sv-section-lead" transparent icon="close" title=${language.getLocalizedString("Close Tools")} @click=${this.onClose}></ff-button>
+            <div id="mainmenu" role="region" @keydown=${e =>this.onKeyDownMain(e)} aria-label=${languageManager.getLocalizedString("Tools and settings")} class="sv-section">
+                <ff-button class="sv-section-lead" transparent icon="close" title=${languageManager.getLocalizedString("Close Tools")} @click=${this.onClose}></ff-button>
                 <div class="sv-tool-buttons">${toolButtons}</div>
                 <sv-tool-menu-view .system=${this.system}></sv-tool-menu-view>
             </div></div>`;

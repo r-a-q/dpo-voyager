@@ -43,7 +43,7 @@ export default class CaptureTaskView extends TaskView<CVCaptureTask>
     protected render()
     {
         /*if (!this.task.activeMeta && !this.task.activeModel) {
-            return html`<div class="sv-placeholder">Please select a model or scene to take a picture</div>`;
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please select a model or scene to take a picture")}</div>`;
         }*/
         if(!this.activeDocument) {
             return;
@@ -58,7 +58,7 @@ export default class CaptureTaskView extends TaskView<CVCaptureTask>
         const ready = this.task.outs.ready.value;
 
         const imageElement = this.task.getImageElement();
-        const image = imageElement ? html`<div class="sv-label">Preview</div>
+        const image = imageElement ? html`<div class="sv-label">${languageManager.getUILocalizedString("Preview")}</div>
             <div class="sv-image">${imageElement}</div>` : null;
 
         return html`<div class="sv-label">${languageManager.getUILocalizedString("Scene State")}</div>

@@ -17,12 +17,15 @@
 
 import SystemView from "client/../../libs/ff-scene/source/ui/SystemView";
 import { customElement, html } from "../explorer/DocumentView";
+import CVLanguageManager from "client/components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-explorer-lockbar")
 export default class ExplorerLockToolbar extends SystemView
 {
+    protected language: CVLanguageManager = null;
+
     _explorerElement: HTMLElement = null;
 
     constructor(explorerElement: HTMLElement)
@@ -45,9 +48,11 @@ export default class ExplorerLockToolbar extends SystemView
 
     protected render()
     {
+        const languageManager = this.language;
+
         return html`<div class="sv-panel-header sv-panel-locks">
             <ff-button-group>
-                <ff-button text="Full" @click=${this.unlockAspectRatio}></ff-button>
+                <ff-button text=${languageManager.getUILocalizedString("Full")} @click=${this.unlockAspectRatio}></ff-button>
                 <ff-button text="16:9" @click=${e => this.setAspectRatio(9,16)}></ff-button>
                 <ff-button text="20:9" @click=${e => this.setAspectRatio(9,20)}></ff-button>
                 <ff-button text="4:3" @click=${e => this.setAspectRatio(3,4)}></ff-button>

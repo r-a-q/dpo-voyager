@@ -157,16 +157,16 @@ export default class ChromeView extends DocumentView
             }
         }
         else {
-            title = document.outs.title.value || "Missing Title" || document.name;
+            title = document.outs.title.value ||   `${languageManager.getLocalizedString("Missing Title")}` || document.name;
         }
 
         titleElement.innerHTML = title;
 
-        return html`${showTourEndMsg ? html`<div class="sr-only" role="alert" id="screen-reader-msg">Tour Ending...</div>` : null}
+        return html`${showTourEndMsg ? html`<div class="sr-only" role="alert" id="screen-reader-msg">${languageManager.getLocalizedString("Tour Ending")}...</div>` : null}
             ${audioVisible ? html`<div class="sv-narrate-player" id="global-audio">${setup.audio.getPlayerById(setup.audio.activeId)}</div>` : null}
             <div class="sv-chrome-header">
                 <div class="sv-main-menu-wrapper">
-                    ${menuVisible ? html`<sv-main-menu role="region" aria-label="Main toolbar" .system=${this.system}></sv-main-menu>` : null}
+                    ${menuVisible ? html`<sv-main-menu role="region" aria-label=${languageManager.getLocalizedString("Main toolbar")} .system=${this.system}></sv-main-menu>` : null}
                 </div>
                 <div class="sv-top-bar">
                     ${titleVisible ? html`<div role="heading" class="ff-ellipsis sv-main-title">${titleElement}<span class="ff-ellipsis"> </span></div>` : null}

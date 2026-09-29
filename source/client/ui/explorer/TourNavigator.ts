@@ -53,7 +53,7 @@ export default class TourNavigator extends DocumentView
     protected render()
     {
         const tours = this.tours;
-        const language = this.language;
+        const languageManager = this.language;
         const ui = this.interface;
         const activeTour = tours.activeTour;
 
@@ -63,10 +63,11 @@ export default class TourNavigator extends DocumentView
             const stepNumber = tours.outs.stepIndex.value + 1;
             const stepCount = tours.outs.stepCount.value;
             title = stepCount > 0 ? tours.stepTitle : tours.title;
-            info = stepCount > 0 ? `${language.getLocalizedString("Step")} ${stepNumber} ${language.getLocalizedString("of")} ${stepCount}` : language.getLocalizedString("No tour steps defined");
+            info = stepCount > 0 ? `${languageManager.getLocalizedString("Step")} ${stepNumber} ${languageManager.getLocalizedString("of")} ${stepCount}` : languageManager.getLocalizedString("No tour steps defined");
         }
         else {
-            title = language.getLocalizedString("No tour selected");
+            //RAQ - doesnt need ${}?
+            title = languageManager.getLocalizedString("No tour selected");
             info = "---";
         }
         this.stepTitle = title;
@@ -75,17 +76,17 @@ export default class TourNavigator extends DocumentView
             title = "";
         }
 
-        const exitButton = ui.isShowing(EUIElements.tour_exit) ? html`<ff-button class="sv-section-lead" transparent icon="close" title=${language.getLocalizedString("Exit Tour")} ?disabled=${!activeTour} @click=${this.onClickExit}></ff-button>` : null;
+        const exitButton = ui.isShowing(EUIElements.tour_exit) ? html`<ff-button class="sv-section-lead" transparent icon="close" title=${languageManager.getLocalizedString("Exit Tour")} ?disabled=${!activeTour} @click=${this.onClickExit}></ff-button>` : null;
 
-        return html`<div class="sv-blue-bar" role=region title="Tour Navigation" @keydown=${e =>this.onKeyDown(e)}><div class="sv-section">
+        return html`<div class="sv-blue-bar" role=region title=${languageManager.getLocalizedString("Tour Navigation")} @keydown=${e =>this.onKeyDown(e)}><div class="sv-section">
             ${exitButton}
             <div class="ff-ellipsis sv-content" id="title-area" aria-live="polite" aria-atomic="true" aria-relevant="additions text" @click=${this.onClickTitle}>
                 <div class="ff-ellipsis" id="title-text"><div class="ff-ellipsis sv-title" id="title-inner">${title}</div></div>
                 <div class="ff-ellipsis sv-text">${info}</div>
             </div>
-            <ff-button class="sv-section-trail" transparent icon="bars" title=${language.getLocalizedString("Show Tour Menu")} @click=${this.onClickMenu}></ff-button>
-            <ff-button class="sv-section-trail" transparent icon="triangle-left" title=${language.getLocalizedString("Go Backward")} ?disabled=${!activeTour} @click=${this.onClickPrevious}></ff-button>
-            <ff-button class="sv-section-trail" transparent icon="triangle-right" title=${language.getLocalizedString("Go Forward")} ?disabled=${!activeTour} @click=${this.onClickNext}></ff-button>
+            <ff-button class="sv-section-trail" transparent icon="bars" title=${languageManager.getLocalizedString("Show Tour Menu")} @click=${this.onClickMenu}></ff-button>
+            <ff-button class="sv-section-trail" transparent icon="triangle-left" title=${languageManager.getLocalizedString("Go Backward")} ?disabled=${!activeTour} @click=${this.onClickPrevious}></ff-button>
+            <ff-button class="sv-section-trail" transparent icon="triangle-right" title=${languageManager.getLocalizedString("Go Forward")} ?disabled=${!activeTour} @click=${this.onClickNext}></ff-button>
         </div></div>`;
     }
 

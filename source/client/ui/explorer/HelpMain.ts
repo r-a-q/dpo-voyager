@@ -101,7 +101,7 @@ export default class HelpMain extends Popup
 
     protected render()
     {
-        const language = this.language;
+        const languageManager = this.language;
         const navMode = this.navMode;
         const isOrbit = navMode === ENavigationType.Orbit;
         const section = this.helpView;
@@ -114,85 +114,85 @@ export default class HelpMain extends Popup
         const fsVisible = this.parentElement.querySelector("#fullscreen-btn") ? true : false;
         const toolsVisible = this.parentElement.querySelector("#tools-btn") ? true : false;
 
-        const fpTileOption = html`<div class="sv-help-text">Ctrl + ${HelpMain.arrowKeysUD}Arrow keys</div>`;
+        const fpTileOption = html`<div class="sv-help-text">Ctrl + ${HelpMain.arrowKeysUD}${languageManager.getLocalizedString("Arrow keys")}</div>`;
 
         const navContent = html`<div class="sv-help-row" aria-live="polite" aria-atomic="true">
                                     <div class="sv-help-section">
                                         <ff-icon class="ff-off" name="rotate"></ff-icon>
-                                        <div class="sv-help-text"><b>${isOrbit ? 'Orbit' : 'Look Around'}</b></div>
-                                        <div class="sv-help-text">${HelpMain.leftClick}Left-click and drag</div>
-                                        <div class="sr-only"> Or.</div>
-                                        <div class="sv-help-text">${HelpMain.oneFinger}One-finger drag</div>
-                                        <div class="sr-only"> Or.</div>
-                                        <div class="sv-help-text">${isOrbit ? HelpMain.arrowKeys : HelpMain.arrowKeysLR}Arrow keys</div>
+                                        <div class="sv-help-text"><b>${isOrbit ? `${languageManager.getLocalizedString('Orbit')}` : `${languageManager.getLocalizedString('Look Around')}`}</b></div>
+                                        <div class="sv-help-text">${HelpMain.leftClick}${languageManager.getLocalizedString("Left-click and drag")}</div>
+                                        <div class="sr-only">${languageManager.getLocalizedString(" Or")}.</div>
+                                        <div class="sv-help-text">${HelpMain.oneFinger}${languageManager.getLocalizedString("One-finger drag")}</div>
+                                        <div class="sr-only">${languageManager.getLocalizedString(" Or")}.</div>
+                                        <div class="sv-help-text">${isOrbit ? HelpMain.arrowKeys : HelpMain.arrowKeysLR}${languageManager.getLocalizedString("Arrow keys")}</div>
                                         ${!isOrbit ? fpTileOption : null}
                                     </div>
                                     <div class="sv-help-section">
                                         <ff-icon class="ff-off" name="move"></ff-icon>
-                                        <div class="sv-help-text"><b>Pan</b></div>
-                                        <div class="sv-help-text">${HelpMain.rightClick}Right-click and drag</div>
-                                        <div class="sr-only"> Or.</div>
-                                        <div class="sv-help-text">${HelpMain.twoFinger}Two-finger drag</div>
-                                        <div class="sr-only"> Or.</div>
-                                        <div class="sv-help-text">Shift + ${HelpMain.arrowKeys}Arrow keys</div>
+                                        <div class="sv-help-text"><b>${languageManager.getLocalizedString("Pan")}</b></div>
+                                        <div class="sv-help-text">${HelpMain.rightClick}${languageManager.getLocalizedString("Right-click and drag")}</div>
+                                        <div class="sr-only">${languageManager.getLocalizedString(" Or")}.</div>
+                                        <div class="sv-help-text">${HelpMain.twoFinger}${languageManager.getLocalizedString("Two-finger drag")}</div>
+                                        <div class="sr-only">${languageManager.getLocalizedString(" Or")}.</div>
+                                        <div class="sv-help-text">Shift + ${HelpMain.arrowKeys}${languageManager.getLocalizedString("Arrow keys")}</div>
                                     </div>
                                     <div class="sv-help-section">
                                         <ff-icon class="ff-off" name="zoom"></ff-icon>
-                                        <div class="sv-help-text"><b>${isOrbit ? 'Zoom' : 'Forward/Backward'}</b></div>
-                                        <div class="sv-help-text">${HelpMain.mouseWheel}Mouse wheel</div>
-                                        <div class="sr-only"> Or.</div>
-                                        <div class="sv-help-text">${HelpMain.pinch}Two-finger pinch</div>
-                                        <div class="sr-only"> Or.</div>
-                                        <div class="sv-help-text">${isOrbit ? 'Ctrl + ' : ''}${isOrbit ? HelpMain.arrowKeys : HelpMain.arrowKeysUD}Arrow keys</div>
+                                        <div class="sv-help-text"><b>${isOrbit ? `${languageManager.getLocalizedString("Zoom")}` : `${languageManager.getLocalizedString("Forward/Backward")}`}</b></div>
+                                        <div class="sv-help-text">${HelpMain.mouseWheel}${languageManager.getLocalizedString("Mouse wheel")}</div>
+                                        <div class="sr-only">${languageManager.getLocalizedString(" Or")}.</div>
+                                        <div class="sv-help-text">${HelpMain.pinch}${languageManager.getLocalizedString("Two-finger pinch")}</div>
+                                        <div class="sr-only">${languageManager.getLocalizedString(" Or")}.</div>
+                                        <div class="sv-help-text">${isOrbit ? 'Ctrl + ' : ''}${isOrbit ? HelpMain.arrowKeys : HelpMain.arrowKeysUD}${languageManager.getLocalizedString("Arrow keys")}</div>
                                     </div>
                                     <div id="sr-trigger" class="sr-only"></div>
                                 </div>`;
 
-        const menuContent = html`<div class="sv-help-text">The tools below can be accessed by clicking the corresponding icons on the menu bar to the left of the screen.</div>
+        const menuContent = html`<div class="sv-help-text">${languageManager.getLocalizedString("The tools below can be accessed by clicking the corresponding icons on the menu bar to the left of the screen")}.</div>
                                 <div class="sv-help-row">
                                     ${arVisible ? html`<div class="sv-help-section sv-help-short">
-                                        <ff-icon title="AR." class="ff-off" name="ar"></ff-icon>
-                                        <div class="sv-help-text">Launch an augmented<br>reality experience.</div>
+                                        <ff-icon title=${languageManager.getLocalizedString("AR")} class="ff-off" name="ar"></ff-icon>
+                                        <div class="sv-help-text">${languageManager.getLocalizedString("Launch an augmented")}<br>${languageManager.getLocalizedString("reality experience")}.</div>
                                     </div>`:""}
                                     ${audioVisible ? html`<div class="sv-help-section sv-help-short">
-                                        <ff-icon title="Play Narration." class="ff-off" name="audio"></ff-icon>
-                                        <div class="sv-help-text">Hear an audio<br>narration of the scene.</div>
+                                        <ff-icon title=${languageManager.getLocalizedString("Play Narration")}. class="ff-off" name="audio"></ff-icon>
+                                        <div class="sv-help-text">${languageManager.getLocalizedString("Hear an audio")}<br>${languageManager.getLocalizedString("narration of the scene")}.</div>
                                     </div>`:""}
                                     ${toursVisible ? html`<div class="sv-help-section sv-help-short">
-                                        <ff-icon title="Tours." class="ff-off" name="globe"></ff-icon>
-                                        <div class="sv-help-text">Take a curated guided<br>tour of the scene.</div>
-                                    </div>`:""}                       
+                                        <ff-icon title=${languageManager.getLocalizedString("Tours")}. class="ff-off" name="globe"></ff-icon>
+                                        <div class="sv-help-text">${languageManager.getLocalizedString("Take a curated guided")}<br>${languageManager.getLocalizedString("tour of the scene")}.</div>
+                                    </div>`:""}
                                     ${readerVisible ? html`<div class="sv-help-section sv-help-short">
-                                        <ff-icon title="Articles." class="ff-off" name="article"></ff-icon>
-                                        <div class="sv-help-text">Read articles about<br>the scene content.</div>
+                                        <ff-icon title=${languageManager.getLocalizedString("Articles")}. class="ff-off" name="article"></ff-icon>
+                                        <div class="sv-help-text">${languageManager.getLocalizedString("Read articles about")}<br>${languageManager.getLocalizedString("the scene content")}.</div>
                                     </div>`:""}
                                     ${annosVisible ? html`<div class="sv-help-section sv-help-short">
-                                        <ff-icon title="Annotations." class="ff-off" name="comment"></ff-icon>
-                                        <div class="sv-help-text">Show annotations<br>highlighting key points.</div>
+                                        <ff-icon title=${languageManager.getLocalizedString("Annotations")}. class="ff-off" name="comment"></ff-icon>
+                                        <div class="sv-help-text">${languageManager.getLocalizedString("Show annotations")}<br>${languageManager.getLocalizedString("highlighting key points")}.</div>
                                     </div>`:""}
                                     <div class="sv-help-section sv-help-short">
-                                        <ff-icon title="Share." class="ff-off" name="share"></ff-icon>
-                                        <div class="sv-help-text">Share the experience<br>with a friend!</div>
+                                        <ff-icon title=${languageManager.getLocalizedString("Share")}. class="ff-off" name="share"></ff-icon>
+                                        <div class="sv-help-text">${languageManager.getLocalizedString("Share the experience")}<br>${languageManager.getLocalizedString("with a friend")}!</div>
                                     </div>
                                     ${fsVisible ? html`<div class="sv-help-section sv-help-short">
-                                        <ff-icon title="Fullscreen." class="ff-off" name="expand"></ff-icon>
-                                        <div class="sv-help-text">View the experience<br>in fullscreen mode.</div>
+                                        <ff-icon title=${languageManager.getLocalizedString("Fullscreen")}. class="ff-off" name="expand"></ff-icon>
+                                        <div class="sv-help-text">${languageManager.getLocalizedString("View the experience")}<br>${languageManager.getLocalizedString("in fullscreen mode")}.</div>
                                     </div>`:""}
                                     ${toolsVisible ? html`<div class="sv-help-section sv-help-short">
-                                        <ff-icon title="Advanced Tools." class="ff-off" name="tools"></ff-icon>
-                                        <div class="sv-help-text">Open the advanced<br>tool menu.</div>
+                                        <ff-icon title=${languageManager.getLocalizedString("Advanced Tools")}. class="ff-off" name="tools"></ff-icon>
+                                        <div class="sv-help-text">${languageManager.getLocalizedString("Open the advanced")}<br>${languageManager.getLocalizedString("tool menu")}.</div>
                                     </div>`:""}
                                 </div>`;
 
         return html`
-        <div class="sv-help-region" role="region" aria-label="Introduction to Voyager" aria-live="polite" @keydown=${e =>this.onKeyDownMain(e)}>
+        <div class="sv-help-region" role="region" aria-label=${languageManager.getLocalizedString("Introduction to Voyager")} aria-live="polite" @keydown=${e =>this.onKeyDownMain(e)}>
             <div class="ff-flex-row">
-                <div class="ff-flex-spacer ff-title"><b>${language.getLocalizedString("Introduction to Voyager")}</b></div>
-                <ff-button icon="close" transparent class="ff-close-button" title=${language.getLocalizedString("Close")} @click=${this.close}></ff-button>
+                <div class="ff-flex-spacer ff-title"><b>${languageManager.getLocalizedString("Introduction to Voyager")}</b></div>
+                <ff-button icon="close" transparent class="ff-close-button" title=${languageManager.getLocalizedString("Close")} @click=${this.close}></ff-button>
             </div>
             <div class="sv-commands">
-                <ff-button text="Navigation" index=${EHelpSection.Nav} selectedIndex=${section} @click=${(e) => this.onClickSection(e, EHelpSection.Nav)}></ff-button>
-                <ff-button text="Menu Icons" index=${EHelpSection.Menu} selectedIndex=${section} @click=${(e) => this.onClickSection(e, EHelpSection.Menu)}></ff-button>
+                <ff-button text=${languageManager.getLocalizedString("Navigation")} index=${EHelpSection.Nav} selectedIndex=${section} @click=${(e) => this.onClickSection(e, EHelpSection.Nav)}></ff-button>
+                <ff-button text=${languageManager.getLocalizedString("Menu Icons")} index=${EHelpSection.Menu} selectedIndex=${section} @click=${(e) => this.onClickSection(e, EHelpSection.Menu)}></ff-button>
             </div>
             ${section === EHelpSection.Nav ? navContent : menuContent}
         </div>
@@ -202,10 +202,10 @@ export default class HelpMain extends Popup
     protected firstUpdated(changedProperties) {
         super.firstUpdated(changedProperties);
 
-        (Array.from(this.getElementsByClassName("ff-button")).find(elem => elem.getAttribute("text") === "Navigation") as HTMLElement).focus();
+        (Array.from(this.getElementsByClassName("ff-button")).find(elem => elem.getAttribute("text") === "Navigation") as HTMLElement).focus(); //raq - does "Navigation" need translation?
 
         // trigger screen reader on first pass
-        setTimeout(() => {this.querySelector("#sr-trigger").textContent = "section end"}, 100);
+        setTimeout(() => {this.querySelector("#sr-trigger").textContent = "section end"}, 100); //raq - does "section end" need translation?
     }
 
     protected onClickSection(event: IButtonClickEvent, idx: number)

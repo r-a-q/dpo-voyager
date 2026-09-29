@@ -49,7 +49,7 @@ class DerivativeList extends List<Derivative>
     {
         const isLoaded = item === this.loadedItem;
 
-        return html`<ff-icon name=${isLoaded ? "check" : "empty"}></ff-icon>
+        return html`<ff-icon name=${isLoaded ? "check" : "empty"}></ff-icon> <!-- raq - is NAME an attribute that needs to be translated? -->
             <span>${EDerivativeUsage[item.data.usage]} - ${EDerivativeQuality[item.data.quality]}</span>`;
     }
 
@@ -60,6 +60,7 @@ class DerivativeList extends List<Derivative>
 
     protected onClickItem(event: MouseEvent, item: Derivative)
     {
+        //raq - translate these too?
         this.dispatchEvent(new CustomEvent("select", {
             detail: { derivative: item }
         }));

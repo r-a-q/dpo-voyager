@@ -30,16 +30,16 @@ import Notification from "@ff/ui/Notification";
 export default class ImportMenu extends Popup
 {
     protected url: string;
-    protected language: CVLanguageManager = null;
+    protected languageManager: CVLanguageManager = null;
     protected filename: string = "";
     protected errorString: string = "";
     protected modelOptions: {name: string, id: string}[] = [];
     protected qualitySelection: EDerivativeQuality = null;
     protected parentSelection: {name: string, id: string} = null;
 
-    static show(parent: HTMLElement, language: CVLanguageManager, filename: string): Promise<[EDerivativeQuality, string]>
+    static show(parent: HTMLElement, languageManager: CVLanguageManager, filename: string): Promise<[EDerivativeQuality, string]>
     {
-        const menu = new ImportMenu(language, filename);
+        const menu = new ImportMenu(languageManager, filename);
         parent.appendChild(menu);
 
         return new Promise((resolve, reject) => {
@@ -48,13 +48,13 @@ export default class ImportMenu extends Popup
         });
     }
 
-    constructor( language: CVLanguageManager, filename: string )
+    constructor( languageManager: CVLanguageManager, filename: string )
     {
         super();
 
-        this.language = language;
+        this.languageManager = languageManager;
         this.filename = filename;
-        this.modelOptions = this.modelOptions.concat(language.getGraphComponents(CVModel2).map(model => ({name: model.node.name, id: model.id})));
+        this.modelOptions = this.modelOptions.concat(languageManager.getGraphComponents(CVModel2).map(model => ({name: model.node.name, id: model.id})));
         this.position = "center";
         this.modal = true;
         this.parentSelection = this.modelOptions.length > 0 ? this.modelOptions[0] : {name: "Model"+this.modelOptions.length.toString(), id: "-1"};
@@ -71,7 +71,7 @@ export default class ImportMenu extends Popup
     confirm()
     {
         if(this.qualitySelection === null) {
-            this.errorString = this.language.getUILocalizedString("Please select derivative quality.");
+            this.errorString = this.languageManager.getUILocalizedString("Please select derivative quality.");
             this.requestUpdate();
         }
         else {
@@ -102,17 +102,17 @@ export default class ImportMenu extends Popup
 
     protected render()
     {
-        const language = this.language;
+        const languageManager = this.languageManager;
 
         return html`
         <div>
             <div class="ff-flex-column ff-fullsize">
                 <div class="ff-flex-row">
-                    <div class="ff-flex-spacer ff-title">${language.getUILocalizedString("File:")} <i>${this.filename}</i></div>
-                    <ff-button icon="close" transparent class="ff-close-button" title=${language.getUILocalizedString("Close")} @click=${this.close}></ff-button>
+                    <div class="ff-flex-spacer ff-title">${languageManager.getUILocalizedString("File:")} <i>${this.filename}</i></div>
+                    <ff-button icon="close" transparent class="ff-close-button" title=${languageManager.getUILocalizedString("Close")} @click=${this.close}></ff-button>
                 </div>
                 <div class="ff-flex-row">
-                    <div class="ff-flex-spacer ff-header">${language.getUILocalizedString("Select Derivative Quality:")}</div>
+                    <div class="ff-flex-spacer ff-header">${languageManager.getUILocalizedString("Select Derivative Quality:")}</div>
                 </div>
                 <div class="ff-splitter-section" style="flex-basis: 70%">
                     <div class="ff-scroll-y">
@@ -120,22 +120,22 @@ export default class ImportMenu extends Popup
                     </div>
                 </div>
                 <div class="ff-flex-row">
-                    <div class="ff-flex-spacer ff-header">${language.getUILocalizedString("Select Model:")}</div>
+                    <div class="ff-flex-spacer ff-header">${languageManager.getUILocalizedString("Select Model:")}</div>
                 </div>
                 <div class="ff-splitter-section" style="flex-basis: 30%">
                     ${this.modelOptions.length > 0 ? html`<div class="ff-scroll-y">
                         ${this.modelOptions.map((option, index) => this.renderParentEntry(option.name, index))}
-                    </div>` : html`<div class="ff-flex-row sv-centered sv-notification" style="height:100%; align-items:center">${language.getUILocalizedString("No Models In Scene")}</div>`}
+                    </div>` : html`<div class="ff-flex-row sv-centered sv-notification" style="height:100%; align-items:center">${languageManager.getUILocalizedString("No Models In Scene")}</div>`}
                 </div>
                 <div class="sv-entry" @click=${e => this.onClickParent(e, -1)} ?selected=${ "-1" === this.parentSelection.id }>
                     <div class="ff-flex-row">
-                        <label class="ff-label ff-off">${language.getUILocalizedString("Add New Model")}:</label>
+                        <label class="ff-label ff-off">${languageManager.getUILocalizedString("Add New Model")}:</label>
                         <div class="ff-flex-spacer"></div>
                         <input id="modelName" tabindex="0" class="ff-property-field ff-input" @change=${this.onNameChange} value=${"Model"+this.modelOptions.length.toString()} touch-action="none" style="touch-action: none;" title="Parent.Name [string]"><div class="ff-fullsize ff-off ff-content"></div></input>
                     </div>
                 </div>
                 <div class="ff-flex-row sv-centered">
-                    <ff-button icon="upload" class="ff-button ff-control" text=${language.getUILocalizedString("Import Model")} title=${language.getUILocalizedString("Import Model")} @click=${this.confirm}></ff-button>
+                    <ff-button icon="upload" class="ff-button ff-control" text=${languageManager.getUILocalizedString("Import Model")} title=${languageManager.getUILocalizedString("Import Model")} @click=${this.confirm}></ff-button>
                 </div>
                 <div class="ff-flex-row sv-centered sv-import-error-msg">
                     <div>${this.errorString}</div>

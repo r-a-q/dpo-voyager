@@ -58,6 +58,7 @@ export default class CVSetup extends Component
 
     ins = this.addInputs(CVSetup.ins);
 
+    //make up a scene (load up - save to a file, want these environmental settings to be the same)
     protected static readonly featureMap = {
         "interface": CVInterface,
         "reader": CVReader,

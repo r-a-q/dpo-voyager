@@ -68,6 +68,7 @@ export default class TaskPanel extends SystemView
 
         const viewElement = task.createView();
 
+        //RAQ - translate task.text? - yes
         return html`
             <div class="sv-panel-header">
                 <ff-icon name=${task.icon}></ff-icon>

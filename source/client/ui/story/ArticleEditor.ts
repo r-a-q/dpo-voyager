@@ -53,6 +53,7 @@ import CVMediaManager, { IAssetOpenEvent, IAssetRenameEvent } from "../../compon
 import CVStandaloneFileManager from "../../components/CVStandaloneFileManager";
 import CVReader from "../../components/CVReader";
 
+import CVLanguageManager from 'client/components/CVLanguageManager';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -62,6 +63,8 @@ export default class ArticleEditor extends SystemView
     private _container: HTMLDivElement = null;
     private _overlay: HTMLElement = null;
     private _assetPath: string = "";
+
+    protected language: CVLanguageManager = null;
 
     protected get mediaManager() {
         return this.system.getMainComponent(CVMediaManager);
@@ -100,8 +103,11 @@ export default class ArticleEditor extends SystemView
 
     closeArticle()
     {
+
+        const languageManager = this.language;
         if (tinymce.activeEditor.isDirty() && this._assetPath) {
-            return MessageBox.show("Close Article", "Would you like save your changes?", "warning", "yes-no").then(result => {
+            //raq - unsure why the last two parts of this section are giving an error message
+            return MessageBox.show(`${languageManager.getUILocalizedString("Close Article")}`, `${languageManager.getUILocalizedString("Would you like to save your changes")}?`, "warning", "yes-no").then(result => {
                 if (result.ok) {
                     return this.writeArticle().then(() => this.clearArticle());
                 }
@@ -116,11 +122,14 @@ export default class ArticleEditor extends SystemView
 
     protected readArticle(assetPath: string)
     {
+
+        const languageManager = this.language;
+
         return this.assetReader.getText(assetPath)
         .then(content => this.parseArticle(content, assetPath))
         .catch(e=>{
             return `
-                <h2>Article not found at ${assetPath}</h2>
+                <h2>${languageManager.getUILocalizedString(`Article not found at ${assetPath}`)}</h2>
                 <p>
                     ${e}
                 </p>
@@ -162,6 +171,8 @@ export default class ArticleEditor extends SystemView
 
         let content = tinymce.activeEditor.getContent({format: "raw"}); //this._editor.root.innerHTML;
 
+        const languageManager = this.language;
+
         // transform absolute to article-relative URLs
         content = content.replace(/(src=\")(.*?)(\")/g, (match, pre, assetUrl, post) => {
             if((assetUrl as string).startsWith("blob")) {
@@ -177,10 +188,10 @@ export default class ArticleEditor extends SystemView
             .then(() => {
                 tinymce.activeEditor.setDirty(false);
                 this.articleReader.ins.articleId.set();
-                new Notification(`Article successfully written to '${this._assetPath}'`, "info");
+                new Notification(`${languageManager.getUILocalizedString(`Article successfully written to '${this._assetPath}'`)}`, "info"); //raq - is "info" supposed to be a #? (error message/ format of Notification keyword)
             })
             .catch(error => {
-                new Notification(`Failed to write article to '${this._assetPath}': ${error.message}`, "error");
+                new Notification(`${languageManager.getUILocalizedString(`Failed to write article to '${this._assetPath}'`)}': ${languageManager.getUILocalizedString(`${error.message}`)}`, "error"); //raq - question about if error.message is translated/"error" itself is translated
             });
     }
 
@@ -218,9 +229,11 @@ export default class ArticleEditor extends SystemView
 
         this._container.id = "editor_wrapper"
 
+        //raq - do the descriptions in toolbar: need to be translated?
         tinymce.init({
             selector: "#editor_wrapper",
             plugins: "image link lists media",
+            //RAQ - translate these?
             toolbar: 'saveButton closeButton | undo redo | link image media | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | styles',
             menubar: false,
             skin: false,
@@ -264,6 +277,7 @@ export default class ArticleEditor extends SystemView
                 });
             },
 
+            //RAQ - does the text in text: need to be translated?
             setup: (editor) => {
                 editor.ui.registry.addButton('saveButton', {
                     text: 'Save',

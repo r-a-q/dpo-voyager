@@ -29,6 +29,7 @@ import CVArticlesTask from "../../components/CVArticlesTask";
 import { TaskView } from "../../components/CVTask";
 import { DEFAULT_LANGUAGE, ELanguageType } from "client/schema/common";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-articles-task-view")
@@ -67,10 +68,10 @@ export default class ArticlesTaskView extends TaskView<CVArticlesTask>
 
         const detailView = activeArticle ? html`<div class="ff-scroll-y ff-flex-column sv-detail-view">
             <sv-property-view .property=${languageManager.ins.activeLanguage}></sv-property-view>
-            <div class="sv-label">Title</div>
+            <div class="sv-label">${languageManager.getUILocalizedString("Title")}</div>
             <ff-line-edit name="title" text=${task.ins.title.value} @change=${this.onTextEdit}></ff-line-edit>
             <sv-property-view .property=${task.ins.tags}></sv-property-view>
-            <div class="sv-label">Lead</div>
+            <div class="sv-label">${languageManager.getUILocalizedString("Lead")}</div>
             <ff-text-edit name="lead" text=${task.ins.lead.value} @change=${this.onTextEdit}></ff-text-edit>
             <sv-property-view class="sv-property-block" disabled .property=${task.ins.uri}></sv-property-view>
         </div>` : null;
@@ -78,7 +79,7 @@ export default class ArticlesTaskView extends TaskView<CVArticlesTask>
         const uri = activeArticle ? activeArticle.uri : null;
 
         // Trying article UI without edit button
-        //<ff-button text="Edit" icon="pen" ?disabled=${!uri} @click=${this.onClickEdit}></ff-button>
+        //<ff-button text=${languageManager.getUILocalizedString("Edit")} icon="pen" ?disabled=${!uri} @click=${this.onClickEdit}></ff-button>
 
         return html`<div class="sv-commands">
             <ff-button text="${languageManager.getUILocalizedString("Create")}" icon="create" @click=${this.onClickCreate}></ff-button>
@@ -114,7 +115,9 @@ export default class ArticlesTaskView extends TaskView<CVArticlesTask>
 
     protected onClickDelete()
     {
-        MessageBox.show("Delete Article", "Are you sure?", "warning", "ok-cancel").then(result => {
+        const languageManager = this.activeDocument.setup.language;
+        //raq - the last two are not working - are they not string types?
+        MessageBox.show(`${languageManager.getUILocalizedString("Delete Article")}`, `${languageManager.getUILocalizedString("Are you sure")}?`, "warning", "ok-cancel").then(result => {
             if (result.ok) {
                 this.task.ins.delete.set();
             }
@@ -188,6 +191,9 @@ export interface IEditArticleEvent extends CustomEvent
 @customElement("sv-article-list")
 export class ArticleList extends List<Article>
 {
+
+    protected language: CVLanguageManager = null;
+
     @property({ attribute: false })
     selectedItem: Article = null;
 
@@ -207,7 +213,10 @@ export class ArticleList extends List<Article>
     {
         const primaryTitle = item.titleIn(this.primarySceneLanguage);
         const activeTitle = item.titleIn(this.activeLanguage);
-        const missingTitle = html `<span class="sv-missing-translation">Missing content</span>`
+
+        const languageManager = this.language;
+
+        const missingTitle = html `<span class="sv-missing-translation">${languageManager.getUILocalizedString("Missing content")}</span>`
         return html`<div class="ff-flex-row ff-group">
             <div class="sv-task-item">${ primaryTitle? primaryTitle : missingTitle}</div>
             <div class="sv-task-item sv-item-border-l">${activeTitle ? activeTitle : missingTitle}</div>
@@ -219,6 +228,7 @@ export class ArticleList extends List<Article>
         return item === this.selectedItem;
     }
 
+    //raq - DO "select", "edit" NEED TRANSLATIONS???
     protected onClickItem(event: MouseEvent, item: Article)
     {
         this.dispatchEvent(new CustomEvent("select", {

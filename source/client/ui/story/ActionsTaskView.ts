@@ -26,12 +26,16 @@ import List from "client/../../libs/ff-ui/source/List";
 import { EActionPlayStyle, EActionTrigger, EActionType, IAction, IAudioClip, TActionType } from "client/schema/meta";
 //import Notification from "@ff/ui/Notification";
 import CVAnnotationView from "client/components/CVAnnotationView";
+import CVLanguageManager from "client/components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-actions-task-view")
 export default class ActionsTaskView extends TaskView<CVActionsTask>
 {
+
+    protected language: CVLanguageManager = null;
+
     protected connected()
     {
         super.connected();
@@ -46,6 +50,9 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
 
     protected render()
     {
+
+        const languageManager = this.language;
+
         if(!this.task.actionManager) {
             return;
         }
@@ -56,12 +63,12 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
         const actionList = node && node.hasComponent(CVAnnotationView) && this.task.actions;
 
         if (!actionList) {
-            return html`<div class="sv-placeholder">Please select a model node to edit its actions.</div>`;
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please select a model node to edit its actions.")}</div>`;
         }
 
         const accessibilityNotice = ins.type.value === EActionType.PlayAudio && 
             (ins.trigger.value === EActionTrigger.OnTourStep || ins.trigger.value === EActionTrigger.OnLoad) ?
-            html`<div class="sv-placeholder" style="color: red">Trigger/Action combination not supported for accessibility.</div>` : null;
+            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("Trigger/Action combination not supported for accessibility.")}</div>` : null;
 
         const actionElement = actionList.find((action) => action.id === ins.activeId.value);
 
@@ -112,12 +119,12 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
         </div>` : null;
 
         return html`<div class="sv-commands">
-            <ff-button text="Create" icon="create" @click=${this.onClickCreate}></ff-button>       
-            <ff-button text="Delete" icon="trash" ?disabled=${!actionElement} @click=${this.onClickDelete}></ff-button>  
+            <ff-button text=${languageManager.getUILocalizedString("Create")} icon="create" @click=${this.onClickCreate}></ff-button>       
+            <ff-button text=${languageManager.getUILocalizedString("Delete")} icon="trash" ?disabled=${!actionElement} @click=${this.onClickDelete}></ff-button>  
         </div>
         <div class="ff-flex-item-stretch">
             <div class="ff-flex-column ff-fullsize">
-                <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item">Name</div><div class="sv-panel-header sv-task-item sv-item-border-l">Type/Trigger</div></div>
+                <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item">${languageManager.getUILocalizedString("Name")}</div><div class="sv-panel-header sv-task-item sv-item-border-l">${languageManager.getUILocalizedString("Type/Trigger")}</div></div>
                 <div class="ff-splitter-section" style="flex-basis: 30%">
                     <div class="ff-scroll-y ff-flex-column">
                         <sv-action-list .data=${actionList} .selectedItem=${actionElement} @select=${this.onSelectAction}></sv-action-list>
@@ -183,6 +190,7 @@ export class ActionList extends List<IAction>
 
     protected onClickItem(event: MouseEvent, item: IAction, index: number)
     {
+        //raq - does the select need to be translated?
         this.dispatchEvent(new CustomEvent("select", {
             detail: { action: item, index }
         }));
@@ -190,6 +198,7 @@ export class ActionList extends List<IAction>
 
     protected onClickEmpty(event: MouseEvent)
     {
+        //raq - does the select need to be translated?
         this.dispatchEvent(new CustomEvent("select", {
             detail: { action: null, index: -1 }
         }));

@@ -31,6 +31,8 @@ import ChromeView from "./ChromeView";
 
 import styles from "./styles.scss";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
+
 ////////////////////////////////////////////////////////////////////////////////
 // EXPLORER ICONS
 
@@ -102,6 +104,10 @@ export default class MainView extends CustomElement
     protected get viewer() {
         return this.application.system.getComponent(CVViewer);
     }
+
+    protected get language() {
+        return this.application.system.getComponent(CVLanguageManager);
+}
 
     protected firstConnected()
     {
@@ -198,10 +204,10 @@ export default class MainView extends CustomElement
 
     protected onFocus()
     {
-        this.shadowRoot.getElementById("sr-intro").innerText =
-            "The Voyager web application allows you to view "
-            + "and interact with a 3D model from the Smithsonian collection. Use the tab key to "
-            + "move through interactive elements, enter or spacebar keys to activate, and the escape key to exit menus.";
+        const languageManager = this.language;
+        this.shadowRoot.getElementById("sr-intro").innerText = `${languageManager.getLocalizedString("The Voyager web application allows you to view ")}
+        + ${languageManager.getLocalizedString("and interact with a 3D model from the Smithsonian collection. Use the tab key to ")}
+        + ${languageManager.getLocalizedString("move through interactive elements, enter or spacebar keys to activate, and the escape key to exit menus")}.`;
     }
 
 

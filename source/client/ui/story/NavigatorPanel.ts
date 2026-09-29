@@ -21,12 +21,16 @@ import "./DocumentList";
 import "./NodeTree";
 
 import CVTaskProvider from "../../components/CVTaskProvider";
+import CVLanguageManager from "client/components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-navigator-panel")
 export default class NavigatorPanel extends SystemView
 {
+
+    protected language: CVLanguageManager = null;
+
     protected get taskProvider() {
         return this.system.getMainComponent(CVTaskProvider);
     }
@@ -50,11 +54,12 @@ export default class NavigatorPanel extends SystemView
     {
         const system = this.system;
         const expertMode = this.taskProvider.expertMode;
+        const languageManager = this.language;
 
         const documentList = expertMode ? html`<div class="ff-splitter-section ff-flex-column" style="flex-basis: 30%">
             <div class="sv-panel-header">
                 <ff-icon name="document"></ff-icon>
-                <div class="ff-text">Documents</div>
+                <div class="ff-text">${languageManager.getUILocalizedString("Document")}</div>
             </div>
             <div class="ff-flex-item-stretch"><div class="ff-scroll-y">
                 <sv-document-list .system=${system}></sv-document-list>
@@ -66,7 +71,7 @@ export default class NavigatorPanel extends SystemView
             <div class="ff-splitter-section ff-flex-column" style="flex-basis: 70%">
                 <div class="sv-panel-header">
                     <ff-icon name="hierarchy"></ff-icon>
-                    <div class="ff-text">Nodes</div>
+                    <div class="ff-text">${languageManager.getUILocalizedString("Nodes")}</div>
                 </div>
                 <sv-node-tree class="ff-flex-item-stretch" .system=${system}></sv-node-tree>
             </div>`;

@@ -80,8 +80,8 @@ export default class AudioTaskView extends TaskView<CVAudioTask>
                     <sv-property-boolean .property=${ins.isNarration} .text=${this.optionText} .customLabelStyle=${narrationFlagClass} ?disabled=${narrationEnabled}></sv-property-boolean>
                 </div>
                 <div class="sv-commands">
-                    <ff-button text="Play" @click=${this.onClickPlay}></ff-button>
-                    <ff-button text="Stop" ?disabled=${!this.task.audioManager.outs.isPlaying.value} @click=${this.onClickStop}></ff-button>
+                    <ff-button text=${languageManager.getUILocalizedString("Play")} @click=${this.onClickPlay}></ff-button>
+                    <ff-button text=${languageManager.getUILocalizedString("Stop")} ?disabled=${!this.task.audioManager.outs.isPlaying.value} @click=${this.onClickStop}></ff-button>
                 </div>
             </div>
         </div>` : null;
@@ -135,6 +135,9 @@ export default class AudioTaskView extends TaskView<CVAudioTask>
 
     protected onDropFile(event: DragEvent)
     {
+
+        const languageManager = this.activeDocument.setup.language;
+
         event.preventDefault();
         let filename = "";
         let newFile : File = null;
@@ -162,18 +165,18 @@ export default class AudioTaskView extends TaskView<CVAudioTask>
 
         const ext = filename.toLowerCase().split(".").pop();
         if(type === "subs" && ext != "vtt"){
-            Notification.show(`Unable to load - Only .vtt files are currently supported.`, "warning");
+            Notification.show(`${languageManager.getUILocalizedString("Unable to load - Only .vtt files are currently supported.")}`, "warning"); //raq - are warning and info considered #s?
         }else if(type === "audio" && ["mp3","m4a","flac","ogg","wav"].indexOf(ext) === -1){
-            Notification.show(`Unable to load - Unsupported audio format .${ext}`, "warning");
+            Notification.show(`${languageManager.getUILocalizedString(`Unable to load - Unsupported audio format .${ext}`)}`, "warning");
         }else{
             if(type === "audio" && ext === "m4a"){
                 // Only m4a does not have 100% browser support
-                Notification.show(`.${ext} audio file are not supported by some browsers`, "info", 3000);
+                Notification.show(`${languageManager.getUILocalizedString(`.${ext} audio file are not supported by some browsers`)}`, "info", 3000);
             }
             if(newFile !== null) {
                 const mediaManager = this.system.getMainComponent(CVMediaManager);
                 mediaManager.uploadFile(filename, newFile, mediaManager.root).then(() => fileProp.setValue(filename)).catch(e => {
-                    Notification.show(`Audio file upload failed.`, "warning");
+                    Notification.show(`${languageManager.getUILocalizedString(`Audio file upload failed.`)}`, "warning");
                     fileProp.setValue("");
                 });
             }
@@ -249,6 +252,7 @@ export class AudioList extends List<IAudioClip>
         return item === this.selectedItem;
     }
 
+    //raq - is "select" a UI facing text?
     protected onClickItem(event: MouseEvent, item: IAudioClip, index: number)
     {
         this.dispatchEvent(new CustomEvent("select", {

@@ -69,7 +69,7 @@ class DocumentList extends List<CVDocument>
     protected renderItem(component: CVDocument)
     {
         return html`<div class="ff-flex-row">
-            <ff-text class="ff-ellipsis">${component.displayName}</ff-text></div>`;
+            <ff-text class="ff-ellipsis">${component.displayName}</ff-text></div>`; //raq - does display name need to be translated
     }
 
     protected isItemSelected(component: CVDocument)

@@ -61,11 +61,13 @@ export default class OverlayTaskView extends TaskView<CVOverlayTask>
 
     protected render()
     {
+
+        const languageManager = this.activeDocument.setup.language;
         const task = this.task;
         const overlays = task.overlays;
 
         if (!this.activeModel) {
-            return html`<div class="sv-placeholder">Please select a model to edit its overlays.</div>`;
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please select a model to edit its overlays.")}</div>`;
         }
 
         const props = task.ins;
@@ -75,31 +77,32 @@ export default class OverlayTaskView extends TaskView<CVOverlayTask>
         this.sceneview.style.cursor = props.paintMode.value === EPaintMode.Interact ? "grab" : "default";
 
         const overlayConfig = activeOverlay ? html`<div class="ff-scroll-y ff-flex-column sv-detail-view">
-            <div class="sv-label"><b>Overlay Editing [${EDerivativeQuality[activeQuality]} Derivative]</b></div>
+        //RAQ - split up the language translations - unsure of EDerivativeQuality
+            <div class="sv-label"><b>${languageManager.getUILocalizedString("Overlay Editing ")}[${EDerivativeQuality[activeQuality]}${languageManager.getUILocalizedString("Derivative")}</b></div>
             <sv-property-view .property=${props.overlayColor}></sv-property-view>
             <sv-property-view .property=${props.overlayOpacity}></sv-property-view>
-            <div class="sv-label"><b>Painting Tools</b></div>
+            <div class="sv-label"><b>${languageManager.getUILocalizedString("Painting Tools")}</b></div>
             <ff-button-group class="sv-commands">
-                <ff-button text="Interact" icon="pointer" class="ff-control" @click=${this.onClickInteract}></ff-button>
-                <ff-button text="Paint" icon="brush" class="ff-control" @click=${this.onClickPaint}></ff-button>
-                <ff-button text="Erase" icon="eraser" class="ff-control" @click=${this.onClickErase}></ff-button>
+                <ff-button text=${languageManager.getUILocalizedString("Interact")} icon="pointer" class="ff-control" @click=${this.onClickInteract}></ff-button>
+                <ff-button text=${languageManager.getUILocalizedString("Paint")} icon="brush" class="ff-control" @click=${this.onClickPaint}></ff-button>
+                <ff-button text=${languageManager.getUILocalizedString("Erase")} icon="eraser" class="ff-control" @click=${this.onClickErase}></ff-button>
             </ff-button-group>
             <sv-property-view .property=${props.overlayBrushSize}></sv-property-view>
             <div class="sv-commands">
-                <ff-button text="Fill All" class="ff-control" @click=${this.onClickFillAll}></ff-button>
-                <ff-button text="Clear All" class="ff-control" @click=${this.onClickClearAll}></ff-button>
+                <ff-button text=${languageManager.getUILocalizedString("Fill All")} class="ff-control" @click=${this.onClickFillAll}></ff-button>
+                <ff-button text=${languageManager.getUILocalizedString("Clear All")} class="ff-control" @click=${this.onClickClearAll}></ff-button>
             </div>
         </div>` : null;
 
 
         return html`<div class="sv-commands">
-            <ff-button text="Create" icon="create" @click=${this.onClickOverlayCreate}></ff-button>       
-            <ff-button text="Delete" icon="trash" ?disabled=${!activeOverlay} @click=${this.onClickOverlayDelete}></ff-button>
-            <ff-button text="Save" icon="save" ?disabled=${!activeOverlay} @click=${this.onClickOverlaySave}></ff-button>
+            <ff-button text=${languageManager.getUILocalizedString("Create")} icon="create" @click=${this.onClickOverlayCreate}></ff-button>       
+            <ff-button text=${languageManager.getUILocalizedString("Delete")} icon="trash" ?disabled=${!activeOverlay} @click=${this.onClickOverlayDelete}></ff-button>
+            <ff-button text=${languageManager.getUILocalizedString("Save")} icon="save" ?disabled=${!activeOverlay} @click=${this.onClickOverlaySave}></ff-button>
         </div>
         <div class="ff-flex-item-stretch">
             <div class="ff-flex-column ff-fullsize">
-                <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item sv-task-item-full">Overlay Images</div></div>
+                <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item sv-task-item-full">${languageManager.getUILocalizedString("Overlay Images")}</div></div>
                 <div class="ff-splitter-section" style="flex-basis: 40%">
                     <div class="ff-scroll-y ff-flex-column">
                         <sv-overlay-list .data=${overlays.slice()} .selectedItem=${activeOverlay} @select=${this.onSelectOverlay}></sv-overlay-list>

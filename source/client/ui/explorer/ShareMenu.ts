@@ -68,10 +68,13 @@ export default class ShareMenu extends Popup
     }
 
     protected render()
+    
     {
+        const languageManager = this.language;
         const url = encodeURIComponent(this.url);
+        //RAQ - Do i translate this? appears in the url
         const title = encodeURI("Check out this interactive 3D model with Smithsonian Voyager:");
-        const language = this.language;
+
 
         const twitterShareUrl = `http://twitter.com/share?text=${title}&url=${url}`;
         const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
@@ -80,24 +83,26 @@ export default class ShareMenu extends Popup
 
         const emailUrl = `mailto:?subject=${title}&body=${url}`;
 
-        const windowName = language.getLocalizedString("Share Experience");
+        const windowName = languageManager.getLocalizedString("Share Experience");
 
         return html`
+        //RAQ - translate windowName in aria-label?
         <div role="region" aria-label=${windowName} @keydown=${e =>this.onKeyDown(e)}>
             <div class="ff-flex-row">
                 <div id="shareTitle" class="ff-flex-spacer ff-title">${windowName}</div>
-                <ff-button icon="close" transparent class="ff-close-button" title=${language.getLocalizedString("Close")} @click=${this.close}></ff-button>
+                <ff-button icon="close" transparent class="ff-close-button" title=${languageManager.getLocalizedString("Close")} @click=${this.close}></ff-button>
             </div>
             <div class="ff-flex-row sv-share-buttons">
-                <a href=${twitterShareUrl} tabindex="-1" target="_blank" rel="noopener noreferrer"><ff-button class="sv-share-button-twitter" icon="twitter" title="Twitter"></ff-button></a>
-                <a href=${facebookShareUrl} tabindex="-1" target="_blank" rel="noopener noreferrer"><ff-button class="sv-share-button-facebook" icon="facebook" title="Facebook"></ff-button></a>
-                <a href=${linkedInShareUrl} tabindex="-1" target="_blank" rel="noopener noreferrer"><ff-button class="sv-share-button-linkedin" icon="linkedin" title="LinkedIn"></ff-button></a>
-                <a href=${emailUrl} tabindex="-1" target="_blank"><ff-button class="sv-share-button-email" icon="email" title=${language.getLocalizedString("Email")}></ff-button></a>
+                <a href=${twitterShareUrl} tabindex="-1" target="_blank" rel="noopener noreferrer"><ff-button class="sv-share-button-twitter" icon="twitter" title=${languageManager.getLocalizedString("Twitter")}ff-button></a>
+                <a href=${facebookShareUrl} tabindex="-1" target="_blank" rel="noopener noreferrer"><ff-button class="sv-share-button-facebook" icon="facebook" title=${languageManager.getLocalizedString("Facebook")}></ff-button></a>
+                <a href=${linkedInShareUrl} tabindex="-1" target="_blank" rel="noopener noreferrer"><ff-button class="sv-share-button-linkedin" icon="linkedin" title=${languageManager.getLocalizedString("LinkedIn")}></ff-button></a>
+                <a href=${emailUrl} tabindex="-1" target="_blank"><ff-button class="sv-share-button-email" icon="email" title=${languageManager.getLocalizedString("Email")}></ff-button></a>
             </div>
-            <div class="ff-title" id="embedTitle">${language.getLocalizedString("Embed Link")}</div>
+            <div class="ff-title" id="embedTitle">${languageManager.getLocalizedString("Embed Link")}</div>
             <div class="ff-flex-row sv-embed-link">
+            //RAQ - translate aria-labelledby?
                 <ff-text-edit readonly aria-labelledby="embedTitle" text=${iFrameEmbedCode}></ff-text-edit>
-                <ff-button icon="copy" title=${language.getLocalizedString("Copy link to Clipboard")} @click=${this.onClickCopy}></ff-button>
+                <ff-button icon="copy" title=${languageManager.getLocalizedString("Copy link to Clipboard")} @click=${this.onClickCopy}></ff-button>
             </div>
         </div>
         `;

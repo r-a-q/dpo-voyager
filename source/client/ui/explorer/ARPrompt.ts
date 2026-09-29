@@ -18,6 +18,8 @@
 import CVDocument from "../../components/CVDocument";
 import CVARManager from "../../components/CVARManager";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
+
 import DocumentView, { customElement, html } from "./DocumentView";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -25,6 +27,9 @@ import DocumentView, { customElement, html } from "./DocumentView";
 @customElement("sv-ar-prompt-container")
 export default class ARPrompt extends DocumentView
 {
+
+    protected language: CVLanguageManager = null;
+
     protected get arManager() {
         return this.system.getMainComponent(CVARManager);
     }
@@ -43,10 +48,12 @@ export default class ARPrompt extends DocumentView
         const outs = arManager.outs;
         const location = arManager.ins.wallMount.value === true ? "a wall" : "the floor";
 
+        const languageManager = this.language;
+
         return !outs.isPlaced.value && outs.isPresenting.value ? html`<div class="sv-ar-prompt">
                 <div class="sv-content">
                     <div><ff-icon class="ff-off ff-icon sv-ar-icon" name="device-move"}></ff-icon></div>
-                    Point your device at ${location} and move it around to place your Smithsonian object!<br><br>**BETA**
+                    ${languageManager.getLocalizedString(`Point your device at ${location} and move it around to place your Smithsonian object!`)}<br><br>**BETA**
                 </div>
             </div>` : null;
     }

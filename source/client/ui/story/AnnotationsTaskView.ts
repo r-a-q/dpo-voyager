@@ -263,6 +263,8 @@ export default class AnnotationsTaskView extends TaskView<CVAnnotationsTask>
     /** Handle image file dropping **TODO: Merge with audio drop handler*/
     protected onDropFile(event: DragEvent)
     {
+        const languageManager = this.activeDocument.setup.language;
+
         event.preventDefault();
         let filename = "";
         let newFile : File = null;
@@ -288,7 +290,7 @@ export default class AnnotationsTaskView extends TaskView<CVAnnotationsTask>
             if(newFile !== null) {
                 const mediaManager = this.system.getMainComponent(CVMediaManager);
                 mediaManager.uploadFile(filename, newFile, mediaManager.root).then(() => imageProp.setValue(filename)).catch(e => {
-                    Notification.show(`Image file upload failed.`, "warning");
+                    Notification.show(`${languageManager.getUILocalizedString("Image file upload failed")}.`, "warning"); //raq - error message?
                     imageProp.setValue("");
                 });
             }
@@ -297,7 +299,7 @@ export default class AnnotationsTaskView extends TaskView<CVAnnotationsTask>
             }
         }
         else {
-            Notification.show(`Unable to load - Only .jpg and .png files are currently supported.`, "warning");
+            Notification.show(`${languageManager.getUILocalizedString("Unable to load - Only .jpg and .png files are currently supported")}.`, "warning"); //raq - error message?
         }
 
         element.classList.remove("sv-drop-zone");

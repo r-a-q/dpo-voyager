@@ -23,6 +23,8 @@ import { ELanguageType } from "client/schema/common";
 import {getFocusableElements, focusTrap} from "../../utils/focusHelpers"
 import { unsafeHTML } from "lit-html/directives/unsafe-html";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
+
 ////////////////////////////////////////////////////////////////////////////////
 
 export interface ITourMenuSelectEvent extends CustomEvent
@@ -44,6 +46,8 @@ export default class TourMenu extends CustomElement
     protected needsFocus: boolean = false;
     protected focusableElements: HTMLElement[] = [];
 
+    protected language: CVLanguageManager = null;
+
     protected firstConnected()
     {
         super.firstConnected();
@@ -53,12 +57,15 @@ export default class TourMenu extends CustomElement
 
     protected renderEntry(tour: ITour, index: number)
     {
-        return html`<div role="option" title="tour entry" tabindex=${index === 0 ? "0" : "-1"} @keydown=${e =>this.onKeyDown(e, index)} class="sv-entry" @click=${e => this.onClickTour(e, index)}>
+
+        const languageManager = this.language;
+
+        return html`<div role="option" title=${languageManager.getLocalizedString("tour entry")} tabindex=${index === 0 ? "0" : "-1"} @keydown=${e =>this.onKeyDown(e, index)} class="sv-entry" @click=${e => this.onClickTour(e, index)}>
             <div class="sv-titlebar">              
-                <h1>${unsafeHTML( Object.keys(tour.titles).length > 0 ? tour.titles[ELanguageType[this.activeLanguage]] || "Missing content" : tour.title )}</h1>
+                <h1>${unsafeHTML( Object.keys(tour.titles).length > 0 ? tour.titles[ELanguageType[this.activeLanguage]] || `${languageManager.getLocalizedString("Missing content")}` : tour.title )}</h1>
                 <ff-icon class="ff-off" name="triangle-right">
             </div>
-            <p>${unsafeHTML( (Object.keys(tour.leads).length > 0 && (Object.values(tour.leads).find((lead)=> lead)))? (tour.leads[ELanguageType[this.activeLanguage]] || "Missing content"): tour.lead )}</p>
+            <p>${unsafeHTML( (Object.keys(tour.leads).length > 0 && (Object.values(tour.leads).find((lead)=> lead)))? (tour.leads[ELanguageType[this.activeLanguage]] || `${languageManager.getLocalizedString("Missing content")}`): tour.lead )}</p>
         </div>`;
     }
 
@@ -66,13 +73,15 @@ export default class TourMenu extends CustomElement
     {
         const tours = this.tours;
 
+        const languageManager = this.language;
+
         if (tours.length === 0) {
             return html`<div class="sv-entry">
-                <h1>No tours available.</h1>
+                <h1>${languageManager.getLocalizedString("No tours available")}.</h1>
             </div>`;
         }
 
-        return html`<div role="listbox" aria-label="interactive tour menu" class="ff-scroll-y">
+        return html`<div role="listbox" aria-label=${languageManager.getLocalizedString("interactive tour menu")} class="ff-scroll-y">
             ${tours.map((tour, index) => this.renderEntry(tour, index))}
         </div>`;
     }

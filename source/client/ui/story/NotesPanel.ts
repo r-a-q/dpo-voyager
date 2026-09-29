@@ -36,12 +36,14 @@ import { INote } from "client/schema/meta";
 import NodeView, { customElement, html } from "../explorer/NodeView";
 import NVNode from "../../nodes/NVNode";
 import CVMeta from "../../components/CVMeta";
+import CVLanguageManager from "client/components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-notes-panel")
 export default class NotesPanel extends NodeView
 {
+
     protected static tableColumns: ITableColumn<INote>[] = [
         { header: "Date", width: 0.3,
             cell: row => moment(row.date).format("YYYY-MM-DD HH:mm:ss"),
@@ -59,10 +61,12 @@ export default class NotesPanel extends NodeView
     constructor(system?: System)
     {
         super(system);
+        //RAQ - added languageManager
+        const languageManager = this.activeDocument.setup.language;
 
         this.noteTable = new Table<INote>();
         this.noteTable.columns = NotesPanel.tableColumns;
-        this.noteTable.placeholder = "No notes available.";
+        this.noteTable.placeholder = `${languageManager.getUILocalizedString("No notes available.")}`;
         this.noteTable.addEventListener("rowclick", this.onClickTableRow.bind(this));
     }
 

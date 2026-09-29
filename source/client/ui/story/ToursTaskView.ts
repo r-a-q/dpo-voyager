@@ -29,12 +29,16 @@ import CVDocument from "../../components/CVDocument";
 import { IButtonClickEvent } from "@ff/ui/Button";
 import { ELanguageType } from "client/schema/common";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-tours-task-view")
 export default class ToursTaskView extends TaskView<CVToursTask>
 {
+
+    protected language: CVLanguageManager = null;
     protected featureConfigMode = false;
 
     protected get snapshots() {
@@ -45,7 +49,7 @@ export default class ToursTaskView extends TaskView<CVToursTask>
     {
         const features = this.snapshots.targetFeatures;
         const keys = Object.keys(features);
-        const languageManager = this.activeDocument.setup.language;
+        const languageManager = this.language;
 
         const buttons = keys.map(key => {
             const title = key[0].toUpperCase() + key.substr(1);
@@ -61,6 +65,12 @@ export default class ToursTaskView extends TaskView<CVToursTask>
 
     protected render()
     {
+
+        //RAQ - might need to change this to CVLanguageManager
+        const languageManager = this.language;
+        const activeLanguage = ELanguageType[languageManager.ins.activeLanguage.value];
+        const primarySceneLanguage = ELanguageType[languageManager.ins.primarySceneLanguage.value];
+
         //console.log("TourTaskView.render");
 
         if(!this.activeDocument) {
@@ -71,10 +81,10 @@ export default class ToursTaskView extends TaskView<CVToursTask>
         const tours = task.tours;
 
         if (!tours) {
-            return html`<div class="sv-placeholder">Please select a document to edit its tours.</div>`;
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please select a document to edit its tours.")}</div>`;
         }
         if (!tours.ins.enabled.value) {
-            return html`<div class="sv-placeholder">Please activate the tour button in the main menu.</div>`;
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please activate the tour button in the main menu.")}</div>`;
         }
 
         if (this.featureConfigMode) {
@@ -84,9 +94,6 @@ export default class ToursTaskView extends TaskView<CVToursTask>
         const tourList = tours.tours;
         const activeTour = tours.activeTour;
         const props = task.ins;
-        const languageManager = this.activeDocument.setup.language;
-        const activeLanguage = ELanguageType[languageManager.ins.activeLanguage.value];
-        const primarySceneLanguage = ELanguageType[languageManager.ins.primarySceneLanguage.value];
 
         const detailView = activeTour ? html`<div class="ff-scroll-y ff-flex-column sv-detail-view">
             <sv-property-view .property=${languageManager.ins.activeLanguage}></sv-property-view>
@@ -224,6 +231,7 @@ interface ISelectTourEvent extends CustomEvent
 @customElement("sv-tour-list")
 export class TourList extends List<ITour>
 {
+
     @property({ attribute: false })
     selectedItem: ITour = null;
 
@@ -241,13 +249,14 @@ export class TourList extends List<ITour>
 
     protected renderItem(item: ITour)
     {
+        const languageManager = this.language;
         // TODO: Temporary - remove when single string properties are phased out
         if(Object.keys(item.titles).length === 0) { 
             item.titles[this.primarySceneLanguage] = item.title;
         }
         const primaryTitle = item.titles[this.primarySceneLanguage];
         const activeTitle = item.titles[this.activeLanguage];
-        const missingTitle = html `<span class="sv-missing-translation">Missing content</span>`
+        const missingTitle = html `<span class="sv-missing-translation">${languageManager.getUILocalizedString("Missing content")}</span>`
         
         return html`<div class="ff-flex-row ff-group">
         <div class="sv-task-item">${primaryTitle? primaryTitle : missingTitle}</div>

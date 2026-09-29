@@ -97,11 +97,13 @@ export default class TaskBar extends SystemView
             <div class="sv-divider"></div>
             <div class="ff-flex-row ff-group">
                 <ff-button text=${saveName} icon="save" @click=${this.onClickSave}></ff-button>
-                ${downloadButtonVisible ? html`<ff-button text="${languageManager.getUILocalizedString("Download")}" icon="download" @click=${this.onClickDownload}></ff-button>` : null}
+                ${downloadButtonVisible ? html`<ff-button text=${languageManager.getUILocalizedString("Download")} icon="download" @click=${this.onClickDownload}></ff-button>` : null}
                 ${exitButtonVisible ? html`<ff-button text="${languageManager.getUILocalizedString("Exit")}" icon="exit" @click=${this.onClickExit}></ff-button>` : null}
             </div>
         `;
     }
+
+    //RAQ - unsure if 
 
     protected onClickTask(event: IButtonClickEvent)
     {

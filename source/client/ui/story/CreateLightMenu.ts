@@ -5,7 +5,7 @@ import { focusTrap, getFocusableElements } from "../../utils/focusHelpers";
 
 @customElement("sv-create-light-menu")
 export default class CreateLightMenu extends Popup {
-    protected language: CVLanguageManager = null;
+    protected languageManager: CVLanguageManager = null; //raq - changed from language to languageManager
     protected allowSunLight: boolean = true;
 
     protected lightType: ELightType = ELightType.directional;
@@ -13,9 +13,9 @@ export default class CreateLightMenu extends Popup {
 
     protected errorString: string = "";
 
-    static show(parent: HTMLElement, language: CVLanguageManager): Promise<[ELightType, string]> {
+    static show(parent: HTMLElement, languageManager: CVLanguageManager): Promise<[ELightType, string]> {
 
-        const menu = new CreateLightMenu(language);
+        const menu = new CreateLightMenu(languageManager);
         parent.appendChild(menu);
 
         return new Promise((resolve, reject) => {
@@ -24,10 +24,10 @@ export default class CreateLightMenu extends Popup {
         });
     }
 
-    constructor(language: CVLanguageManager) {
+    constructor(languageManager: CVLanguageManager) {
         super();
 
-        this.language = language;
+        this.languageManager = languageManager;
 
         this.position = "center";
         this.modal = true;
@@ -40,10 +40,10 @@ export default class CreateLightMenu extends Popup {
 
     confirm() {
         if (this.lightType === null || this.name.trim() === "") {
-            this.errorString = this.language.getUILocalizedString("Please select a light type and enter a name.");
+            this.errorString = this.languageManager.getUILocalizedString("Please select a light type and enter a name.");
             this.requestUpdate();
         } else {
-            this.dispatchEvent(new CustomEvent("confirm"));
+            this.dispatchEvent(new CustomEvent(this.languageManager.getUILocalizedString("confirm"))); //raq - different way of translating - correct??? (languageManager does not exist in light menu)
             this.remove();
         }
     }
@@ -97,13 +97,13 @@ export default class CreateLightMenu extends Popup {
     }
 
     protected render() {
-        const language = this.language;
+        const languageManager = this.languageManager;
 
         return html`
-        <div role="region" aria-label="Create Light Menu" @keydown=${e => this.onKeyDownMain(e)}>
+        <div role="region" aria-label=${languageManager.getUILocalizedString("Create Light Menu")} @keydown=${e => this.onKeyDownMain(e)}>
             <div class="ff-flex-column ff-fullsize">
                 <div class="ff-flex-row">
-                    <div class="ff-flex-spacer ff-title">${language.getUILocalizedString("Create Light")}</div>
+                    <div class="ff-flex-spacer ff-title">${languageManager.getUILocalizedString("Create Light")}</div>
                 </div>
                 <div class="ff-flex-row">
                     <div class="ff-dropdown">
@@ -111,22 +111,23 @@ export default class CreateLightMenu extends Popup {
                         ${Object.keys(ELightType)
                             .filter(key => typeof ELightType[key] === 'number')
                             .map((key) => {
-                                const light = language.system.getComponent("CV"+key.charAt(0).toUpperCase() + key.slice(1)+"Light", true);
+                                const light = languageManager.system.getComponent("CV"+key.charAt(0).toUpperCase() + key.slice(1)+"Light", true);
                                 const isDisabled = light && light.isGraphSingleton;
-                                return html`<option value=${ELightType[key]} ?disabled=${isDisabled}>${key}</option>`
+                                //raq - the light options are displayed to the user - translate it ${languageManager.getUILocalizedString()}
+                                return html`<option value=${languageManager.getUILocalizedString(`${ELightType[key]}`)} ?disabled=${isDisabled}>${key}</option>` //raq - translate ENUM values?
                             })}
                     </select>
                     </div>
                 </div>
                 <div class="ff-flex-row">
-                    <label class="ff-label">${language.getUILocalizedString("Name")}</label>
+                    <label class="ff-label">${languageManager.getUILocalizedString("Name")}</label>
                     <div class="ff-flex-spacer"></div>
                     <input class="ff-input" type="text" .value=${this.name} @input=${(e: Event) => this.name = (e.target as HTMLInputElement).value} />
                 </div>
                 <div class="ff-flex-row">
-                    <ff-button icon="check" class="ff-button ff-control" text=${language.getUILocalizedString("Create")} title=${language.getUILocalizedString("Create Light")} @click=${this.confirm}></ff-button>
+                    <ff-button icon="check" class="ff-button ff-control" text=${languageManager.getUILocalizedString("Create")} title=${languageManager.getUILocalizedString("Create Light")} @click=${this.confirm}></ff-button>
                     <div class="ff-flex-spacer"></div>
-                    <ff-button icon="close" class="ff-close-button ff-control" text=${language.getUILocalizedString("Cancel")} title=${language.getUILocalizedString("Cancel")} @click=${this.close}></ff-button>
+                    <ff-button icon="close" class="ff-close-button ff-control" text=${languageManager.getUILocalizedString("Cancel")} title=${languageManager.getUILocalizedString("Cancel")} @click=${this.close}></ff-button>
                 </div>
             </div>
         </div>

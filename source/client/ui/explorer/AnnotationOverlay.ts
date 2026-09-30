@@ -21,6 +21,7 @@ import "@ff/ui/Button";
 import "@ff/ui/TextEdit";
 import {getFocusableElements, focusTrap} from "../../utils/focusHelpers";
 import AnnotationSprite from "client/annotations/AnnotationSprite";
+import CVLanguageManager from "client/components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -30,6 +31,7 @@ export default class AnnotationOverlay extends Popup
     protected content: HTMLElement = null;
     protected sprite: AnnotationSprite = null;
     protected resizeObserver: ResizeObserver = null;
+    protected language: CVLanguageManager = null;
 
     static show(parent: HTMLElement, content: HTMLElement, sprite: AnnotationSprite): Promise<void>
     {
@@ -48,6 +50,7 @@ export default class AnnotationOverlay extends Popup
         this.close = this.close.bind(this);
         this.onKeyDownMain = this.onKeyDownMain.bind(this);
 
+        //this.language = language;
         this.content = content;
         this.title = "";
         this.sprite = sprite;
@@ -91,6 +94,7 @@ export default class AnnotationOverlay extends Popup
 
     protected render()
     {
+        const languageManager = this.language;
         return html`
         <div class="sv-help-region" id="anno_container" role="region" @wheel=${(e) => this.discardEvents(e)} @pointerdown=${(e) => this.discardEvents(e)} aria-label=${languageManager.getLocalizedString("Annotation pop-up")} aria-live="polite" aria-atomic="true" @keydown=${e =>this.onKeyDownMain(e)}>
             <div class="ff-flex-row">

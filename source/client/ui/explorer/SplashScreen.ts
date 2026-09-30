@@ -70,16 +70,16 @@ export default class SplashScreen extends Popup
 
     protected render()
     {
-        const language = this.language;
+        const languageManager = this.language;
         const contentElement = this.contentElement;
 
         contentElement.innerHTML = this.content;
 
         return html`
-        <div id="main" tabIndex="-1" role="region" aria-label="Introduction to Voyager" @keydown=${e =>this.onKeyDownMain(e)}>
+        <div id="main" tabIndex="-1" role="region" aria-label=${languageManager.getLocalizedString("Introduction to Voyager" )}@keydown=${e =>this.onKeyDownMain(e)}>
             <div class="ff-flex-row">
-                <div class="ff-flex-spacer ff-title"><b>${language.getLocalizedString("Welcome to Voyager")}</b></div>
-                <ff-button icon="close" transparent class="ff-close-button" title=${language.getLocalizedString("Close")} @click=${this.close}></ff-button>
+                <div class="ff-flex-spacer ff-title"><b>${languageManager.getLocalizedString("Welcome to Voyager")}</b></div>
+                <ff-button icon="close" transparent class="ff-close-button" title=${languageManager.getLocalizedString("Close")} @click=${this.close}></ff-button>
             </div>
             <div>
                 ${contentElement}

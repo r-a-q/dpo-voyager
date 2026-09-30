@@ -162,7 +162,7 @@ export default class ChromeView extends DocumentView
 
         titleElement.innerHTML = title;
 
-        return html`${showTourEndMsg ? html`<div class="sr-only" role="alert" id="screen-reader-msg">${languageManager.getLocalizedString("Tour Ending")}...</div>` : null} //raq - called on "Tour Ending" not "Tour Ending..."
+        return html`${showTourEndMsg ? html`<div class="sr-only" role="alert" id="screen-reader-msg">${languageManager.getLocalizedString("Tour Ending")}...</div>` : null}
             ${audioVisible ? html`<div class="sv-narrate-player" id="global-audio">${setup.audio.getPlayerById(setup.audio.activeId)}</div>` : null}
             <div class="sv-chrome-header">
                 <div class="sv-main-menu-wrapper">

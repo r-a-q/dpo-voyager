@@ -20,11 +20,15 @@ import CVARManager from "../../components/CVARManager";
 
 import DocumentView, { customElement, html } from "./DocumentView";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-ar-prompt-container")
 export default class ARPrompt extends DocumentView
 {
+    protected language: CVLanguageManager = null;
+
     protected get arManager() {
         return this.system.getMainComponent(CVARManager);
     }
@@ -42,6 +46,7 @@ export default class ARPrompt extends DocumentView
         const arManager = this.arManager;
         const outs = arManager.outs;
         const location = arManager.ins.wallMount.value === true ? "a wall" : "the floor";
+        const languageManager = this.language;
 
         return !outs.isPlaced.value && outs.isPresenting.value ? html`<div class="sv-ar-prompt">
                 <div class="sv-content">

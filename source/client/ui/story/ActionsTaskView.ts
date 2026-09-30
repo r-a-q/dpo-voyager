@@ -26,7 +26,6 @@ import List from "client/../../libs/ff-ui/source/List";
 import { EActionPlayStyle, EActionTrigger, EActionType, IAction, IAudioClip, TActionType } from "client/schema/meta";
 //import Notification from "@ff/ui/Notification";
 import CVAnnotationView from "client/components/CVAnnotationView";
-import CVLanguageManager from "client/components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -61,12 +60,12 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
 
         if (!actionList) {
             //RAQ - added language translator
-            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please select a model node to edit its actions.")}</div>`;
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please select a model node to edit its actions")}.</div>`;
         }
 
         const accessibilityNotice = ins.type.value === EActionType.PlayAudio && 
             (ins.trigger.value === EActionTrigger.OnTourStep || ins.trigger.value === EActionTrigger.OnLoad) ?
-            html`<div class="sv-placeholder" style="color: red">Trigger/Action combination not supported for accessibility.</div>` : null;
+            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("Trigger/Action combination not supported for accessibility")}.</div>` : null;
 
         const actionElement = actionList.find((action) => action.id === ins.activeId.value);
 

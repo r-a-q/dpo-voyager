@@ -202,10 +202,10 @@ export default class HelpMain extends Popup
     protected firstUpdated(changedProperties) {
         super.firstUpdated(changedProperties);
 
-        (Array.from(this.getElementsByClassName("ff-button")).find(elem => elem.getAttribute("text") === "Navigation") as HTMLElement).focus(); //raq - does "Navigation" need translation?
+        (Array.from(this.getElementsByClassName("ff-button")).find(elem => elem.getAttribute("text") === "Navigation") as HTMLElement).focus();
 
         // trigger screen reader on first pass
-        setTimeout(() => {this.querySelector("#sr-trigger").textContent = "section end"}, 100); //raq - does "section end" need translation?
+        setTimeout(() => {this.querySelector("#sr-trigger").textContent = "section end"}, 100);
     }
 
     protected onClickSection(event: IButtonClickEvent, idx: number)

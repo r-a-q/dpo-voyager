@@ -220,8 +220,18 @@ export default class ArticleEditor extends SystemView
 
         tinymce.init({
             selector: "#editor_wrapper",
+            language_url: '\assets\language\es_MX.js',
+            language: 'es_MX',
             plugins: "image link lists media",
-            toolbar: 'saveButton closeButton | undo redo | link image media | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | styles',
+            toolbar: 'saveButton closeButton | undo redo | link image media | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | styles | language',
+            content_langs: [
+                { title: 'English', code: 'en' },
+                { title: 'Spanish', code: 'es' },
+                { title: 'French', code: 'fr' },
+                { title: 'German', code: 'de' },
+                { title: 'Portuguese', code: 'pt' },
+                { title: 'Chinese', code: 'zh' }
+            ],
             menubar: false,
             skin: false,
             height: "100%",

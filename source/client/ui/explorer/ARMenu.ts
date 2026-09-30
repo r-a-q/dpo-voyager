@@ -25,6 +25,7 @@ import DocumentView, { customElement, html } from "./DocumentView";
 import CVAnnotationView from "client/components/CVAnnotationView";
 import CVScene from "client/components/CVScene";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-ar-menu")
@@ -32,6 +33,7 @@ export default class ARMenu extends DocumentView
 {
     protected documentProps = new Subscriber("value", this.onUpdate, this);
     protected shareButtonSelected = false;
+    protected language: CVLanguageManager = null;
 
     protected get analytics() {
         return this.system.getMainComponent(CVAnalytics);
@@ -65,6 +67,8 @@ export default class ARMenu extends DocumentView
         if (!document) {
             return html``;
         }
+
+        const languageManager = this.language;
 
         const arManager = this.arManager;
         const outs = arManager.outs;

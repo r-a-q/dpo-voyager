@@ -46,7 +46,9 @@ export default class ReaderView extends DocumentView
     {
         const article = entry.article;
 
-        return html`<div role="option" title="article" tabindex=${index === 0 ? "0" : "-1"} @keydown=${e =>this.onKeyDown(e, article.id)} class="sv-entry" @click=${e => this.onClickArticle(e, article.id)}>      
+        const languageManager = this.language;
+
+        return html`<div role="option" title=${languageManager.getLocalizedString("article")} tabindex=${index === 0 ? "0" : "-1"} @keydown=${e =>this.onKeyDown(e, article.id)} class="sv-entry" @click=${e => this.onClickArticle(e, article.id)}>      
             <div class="sv-titlebar">              
                 <h1>${unsafeHTML(article.title)}</h1>
                 <ff-icon class="ff-off" name="triangle-right">
@@ -58,27 +60,27 @@ export default class ReaderView extends DocumentView
     protected render()
     {
         const reader = this.reader;
-        const language = this.language;
+        const languageManager = this.language;
         const tours = this.tours;
 
         if (!reader) {
-            return html`<div class="ff-placeholder">Please select a document to display its articles.</div>`;
+            return html`<div class="ff-placeholder">${languageManager.getLocalizedString("Please select a document to display its articles")}.</div>`;
         }
 
-        const menuButton = this.tours.ins.enabled.value ? null : html`<ff-button class="sv-nav-button" inline title=${language.getLocalizedString("Article Menu")} icon="bars" @click=${this.onClickMenu}></ff-button>`;
+        const menuButton = this.tours.ins.enabled.value ? null : html`<ff-button class="sv-nav-button" inline title=${languageManager.getLocalizedString("Article Menu")} icon="bars" @click=${this.onClickMenu}></ff-button>`;
 
         if (!reader.activeArticle) {
             const articles = reader.articles;
-            return html`<div class="sv-left"></div><div role="listbox" aria-label="articles" class="sv-article">
-                <!--ff-button class="sv-nav-button" inline title=${language.getLocalizedString("Close Article Reader")} icon="close" @click=${this.onClickClose}></ff-button-->
+            return html`<div class="sv-left"></div><div role="listbox" aria-label=${languageManager.getLocalizedString("articles")} class="sv-article">
+                <!--ff-button class="sv-nav-button" inline title=${languageManager.getLocalizedString("Close Article Reader")} icon="close" @click=${this.onClickClose}></ff-button-->
                 ${articles.map((entry, index) => this.renderMenuEntry(entry, index))}
             </div><div class="sv-right"></div>`;
         }
 
         return html`<div class="sv-left"></div><div class="sv-article" @keydown=${e =>this.onKeyDown(e, reader.activeArticle.id)} >
-                <ff-button class="sv-nav-button" inline title=${language.getLocalizedString("Close Article Reader")} icon="close" @click=${this.onClickClose}></ff-button>
+                <ff-button class="sv-nav-button" inline title=${languageManager.getLocalizedString("Close Article Reader")} icon="close" @click=${this.onClickClose}></ff-button>
                 ${menuButton}
-                <div role="region" aria-live="polite" aria-atomic="true" title="article" class="sv-container"></div>
+                <div role="region" aria-live="polite" aria-atomic="true" title=${languageManager.getLocalizedString("article")} class="sv-container"></div>
             </div><div class="sv-right"></div>`;
     }
 
@@ -105,6 +107,8 @@ export default class ReaderView extends DocumentView
         super.updated(changedProperties);
 
         const reader = this.reader;
+        //RAQ - added languageManager
+        const languageManager = this.language;
 
         if (reader) {
             if(reader.activeArticle) {
@@ -113,7 +117,8 @@ export default class ReaderView extends DocumentView
 
                 // Hack so that initial article display is detected by screen readers.
                 if(this.firstRender) {
-                    setTimeout(() => {container.insertAdjacentHTML("beforeend","<div class='sr-only'>-end of article-</div>");}, 200);
+                    //RAQ - translate "-end of article-"?
+                    setTimeout(() => {container.insertAdjacentHTML("beforeend",`<div class='sr-only'>-${languageManager.getLocalizedString("end of article")}-</div>`);}, 200);
                     this.firstRender = false;
                 }
             }

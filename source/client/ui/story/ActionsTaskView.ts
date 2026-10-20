@@ -26,7 +26,6 @@ import List from "client/../../libs/ff-ui/source/List";
 import { EActionPlayStyle, EActionTrigger, EActionType, IAction, IAudioClip, TActionType } from "client/schema/meta";
 //import Notification from "@ff/ui/Notification";
 import CVAnnotationView from "client/components/CVAnnotationView";
-import CVLanguageManager from "client/components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -66,7 +65,12 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
 
         const accessibilityNotice = ins.type.value === EActionType.PlayAudio && 
             (ins.trigger.value === EActionTrigger.OnTourStep || ins.trigger.value === EActionTrigger.OnLoad) ?
-            html`<div class="sv-placeholder" style="color: red">Trigger/Action combination not supported for accessibility.</div>` : null;
+            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("Trigger/Action combination not supported for accessibility.")}</div>` : null;
+
+        const stateChangeWarning = ins.type.value === EActionType.StateChange && 
+            ins.trigger.value === EActionTrigger.OnTourStep ?
+            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("CAUTION: We recommend using traditional tour steps for tour-based state changes.")} 
+                ${languageManager.getUILocalizedString("State Editor based changes may have unintended consequences.")}</div>` : null;
 
         const actionElement = actionList.find((action) => action.id === ins.activeId.value);
 
@@ -86,9 +90,12 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
         const annoView = ins.trigger.value === EActionTrigger.OnAnnotation ? html`
             <sv-property-view .property=${ins.annotation}></sv-property-view>
         ` : null;
+        const stateView = ins.type.value === EActionType.StateChange ? html`
+            <sv-property-view .property=${ins.state}></sv-property-view>
+        ` : null;
         const annoActionView = ins.type.value === EActionType.ShowAnnotation || ins.type.value === EActionType.HideAnnotation 
             || ins.type.value === EActionType.ToggleAnnotation ? html`
-            <sv-property-view .property=${ins.actionAnnotation}></sv-property-view>
+            <sv-property-tags .fixed=${true} .delimiter=${"\x1F"} .property=${ins.actionAnnotation}></sv-property-tags>
         ` : null;
         const tourView = ins.trigger.value === EActionTrigger.OnTourStep ? html`
             <sv-property-view .property=${ins.tour}></sv-property-view>
@@ -102,6 +109,7 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
         ` : null;
 
         const detailView = actionElement ? html`<div class="ff-scroll-y ff-flex-column sv-detail-view">
+            ${stateChangeWarning}
             ${accessibilityNotice}
             <sv-property-view .property=${ins.name}></sv-property-view>
             <sv-property-view .property=${ins.trigger}></sv-property-view>
@@ -112,17 +120,18 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
             ${audioActionView}
             ${animActionView}
             ${annoActionView}
+            ${stateView}
             ${actionTargetView}
             <sv-property-view .property=${ins.enabled}></sv-property-view>
         </div>` : null;
 
         return html`<div class="sv-commands">
-            <ff-button text="Create" icon="create" @click=${this.onClickCreate}></ff-button>       
-            <ff-button text="Delete" icon="trash" ?disabled=${!actionElement} @click=${this.onClickDelete}></ff-button>  
+            <ff-button text=${languageManager.getUILocalizedString("Create")} icon="create" @click=${this.onClickCreate}></ff-button>       
+            <ff-button text=${languageManager.getUILocalizedString("Delete")} icon="trash" ?disabled=${!actionElement} @click=${this.onClickDelete}></ff-button>  
         </div>
         <div class="ff-flex-item-stretch">
             <div class="ff-flex-column ff-fullsize">
-                <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item">Name</div><div class="sv-panel-header sv-task-item sv-item-border-l">Type/Trigger</div></div>
+                <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item">Name</div><div class="sv-panel-header sv-task-item sv-item-border-l">${languageManager.getUILocalizedString("Type/Trigger")}</div></div>
                 <div class="ff-splitter-section" style="flex-basis: 30%">
                     <div class="ff-scroll-y ff-flex-column">
                         <sv-action-list .data=${actionList} .selectedItem=${actionElement} @select=${this.onSelectAction}></sv-action-list>

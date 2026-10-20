@@ -20,6 +20,7 @@ import List from "@ff/ui/List";
 
 import Annotation from "../../models/Annotation";
 import { DEFAULT_LANGUAGE, ELanguageType } from "client/schema/common";
+import CVLanguageManager from "client/components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -34,6 +35,8 @@ export interface ISelectAnnotationEvent extends CustomEvent
 @customElement("sv-annotation-list")
 class AnnotationList extends List<Annotation>
 {
+    protected language: CVLanguageManager = null;
+
     @property({ attribute: false })
     selectedItem: Annotation = null;
 
@@ -53,7 +56,8 @@ class AnnotationList extends List<Annotation>
     {
         const primaryTitle = item.titleIn(this.primarySceneLanguage);
         const activeTitle = item.titleIn(this.activeLanguage);
-        const missingTitle = html `<span class="sv-missing-translation">Missing content</span>`
+        const languageManager = this.language;
+        const missingTitle = html `<span class="sv-missing-translation">${languageManager.getUILocalizedString("Missing Content")}</span>`
         return html`<div class="ff-flex-row ff-group">
             <div class="sv-task-item">${ primaryTitle? primaryTitle : missingTitle}</div>
             <div class="sv-task-item sv-item-border-l">${activeTitle ? activeTitle : missingTitle}

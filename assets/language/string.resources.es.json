@@ -287,6 +287,12 @@
 	"Menu Icons": "Iconos del menú",
 	"Mouse wheel": "Rueda del ratón",
 	"none": "ninguno",
-	"Logo" : "Logo - spanish"
+
+	"Logo" : "Logo - spanish",
+	"Trigger/Action combination not supported for accessibility" : "Trigger/Action combination not supported for accessibility - spanish",
+	"Please select a model node to edit its actions" : "Please select a model node to edit its actions - spanish",
+	"CAUTION: We recommend using traditional tour steps for tour-based state changes." : "CAUTION: We recommend using traditional tour steps for tour-based state changes. - spanish",
+	"State Editor based changes may have unintended consequences." : "State Editor based changes may have unintended consequences. - spanish"
+
 
 }

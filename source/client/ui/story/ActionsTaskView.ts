@@ -55,18 +55,22 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
         const node = this.activeNode;
         const actionList = node && node.hasComponent(CVAnnotationView) && this.task.actions;
 
+        //RAQ - added language manager to get localized string for text 
+        const languageManager = this.activeDocument.setup.language;
+
         if (!actionList) {
-            return html`<div class="sv-placeholder">Please select a model node to edit its actions.</div>`;
+            //RAQ - added language translator
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please select a model node to edit its actions")}.</div>`;
         }
 
         const accessibilityNotice = ins.type.value === EActionType.PlayAudio && 
             (ins.trigger.value === EActionTrigger.OnTourStep || ins.trigger.value === EActionTrigger.OnLoad) ?
-            html`<div class="sv-placeholder" style="color: red">Trigger/Action combination not supported for accessibility.</div>` : null;
+            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("Trigger/Action combination not supported for accessibility")}.</div>` : null;
 
         const stateChangeWarning = ins.type.value === EActionType.StateChange && 
             ins.trigger.value === EActionTrigger.OnTourStep ?
-            html`<div class="sv-placeholder" style="color: red">CAUTION: We recommend using traditional tour steps for tour-based state changes. 
-                State Editor based changes may have unintended consequences.</div>` : null;
+            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("CAUTION: We recommend using traditional tour steps for tour-based state changes.")} +
+                ${languageManager.getUILocalizedString("State Editor based changes may have unintended consequences.")}</div>` : null;
 
         const actionElement = actionList.find((action) => action.id === ins.activeId.value);
 
@@ -122,12 +126,12 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
         </div>` : null;
 
         return html`<div class="sv-commands">
-            <ff-button text="Create" icon="create" @click=${this.onClickCreate}></ff-button>       
-            <ff-button text="Delete" icon="trash" ?disabled=${!actionElement} @click=${this.onClickDelete}></ff-button>  
+            <ff-button text=${languageManager.getUILocalizedString("Create")} icon="create" @click=${this.onClickCreate}></ff-button>       
+            <ff-button text=${languageManager.getUILocalizedString("Delete")} icon="trash" ?disabled=${!actionElement} @click=${this.onClickDelete}></ff-button>  
         </div>
         <div class="ff-flex-item-stretch">
             <div class="ff-flex-column ff-fullsize">
-                <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item">Name</div><div class="sv-panel-header sv-task-item sv-item-border-l">Type/Trigger</div></div>
+                <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item">${languageManager.getUILocalizedString("Name")}</div><div class="sv-panel-header sv-task-item sv-item-border-l">${languageManager.getUILocalizedString("Type/Trigger")}</div></div>
                 <div class="ff-splitter-section" style="flex-basis: 30%">
                     <div class="ff-scroll-y ff-flex-column">
                         <sv-action-list .data=${actionList} .selectedItem=${actionElement} @select=${this.onSelectAction}></sv-action-list>

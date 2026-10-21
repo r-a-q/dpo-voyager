@@ -297,6 +297,7 @@
 	"Image file upload failed." : "Image file upload failed. - spanish",
 	"Select Import Type:" : "Select Import Type: - spanish",
 	"Import Image" : "Import Image - spanish",
-		"File:" : "Archivo:"
+		"File:" : "Archivo:",
+		"Default:" : "Por defecto:"
 
 }

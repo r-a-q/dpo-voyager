@@ -68,7 +68,7 @@ export default class StatePanel extends DocumentView
 
         this.stateTable = new Table();
         this.stateTable.columns = StatePanel.tableColumns;
-        this.stateTable.placeholder = "Start by creating a tour step.";
+        
         this.stateTable.addEventListener("rowclick", this.onClickTableRow.bind(this));
 
         this.subscriber = new Subscriber("value", this.onUpdate, this);
@@ -96,6 +96,7 @@ export default class StatePanel extends DocumentView
 
         const machine = this.snapshots;
         const languageManager = this.activeDocument.setup.language;
+        this.stateTable.placeholder = "Start by creating a tour step.";
         const activeState = this.activeState;
 
         const tagDisplay = activeState ? html`<div class="sv-property-tags"><div class="sv-tags-selected">
@@ -114,18 +115,18 @@ export default class StatePanel extends DocumentView
 
                             return html`<div class="sv-tag-chip">
                             <span class="sv-tag-chip-label"><b>${componentName}${path.split('/').pop()}</b><i>${value}</i></span>
-                            <ff-button class="sv-tag-chip-remove" icon="close" title=${languageManager ? languageManager.getLocalizedString("Remove tag") : "Remove tag"} @click=${() => this.onRemoveTag(index)}></ff-button>
+                            <ff-button class="sv-tag-chip-remove" icon="close" title=${languageManager ? languageManager.getUILocalizedString("Remove tag") : "Remove tag"} @click=${() => this.onRemoveTag(index)}></ff-button>
                         </div>`
                     })}
                 </div></div>` : null;
         
         const stepDetailView = activeState ? html`<div class="ff-scroll-y ff-flex-column sv-detail-view">
-            <div class="sv-label">Title</div>
+            <div class="sv-label">${languageManager.getUILocalizedString("Title")}</div>
             <ff-line-edit name="Title" text=${activeState.title} @change=${this.onTitleEdit}></ff-line-edit>
             <sv-property-view .property=${machine.ins.curve}></sv-property-view>
             <sv-property-view .property=${machine.ins.duration} commitonly></sv-property-view>
             <sv-property-view .property=${machine.ins.threshold} commitonly></sv-property-view>
-            <div class="sv-label">Changes</div>
+            <div class="sv-label">${languageManager.getUILocalizedString("Changes")}</div>
             ${tagDisplay}
         </div>` : html`<div class="ff-placeholder"><div>${languageManager.getUILocalizedString("Create or select a state change to edit.")}</div></div>`;
 

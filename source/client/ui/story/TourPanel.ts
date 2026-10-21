@@ -24,7 +24,6 @@ import Table, { ITableColumn, ITableRowClickEvent } from "@ff/ui/Table";
 import CVDocument from "../../components/CVDocument";
 import CVTours from "../../components/CVTours";
 import CVToursTask from "../../components/CVToursTask";
-import CVLanguageManager from "../../components/CVLanguageManager";
 
 import DocumentView, { customElement, html, TemplateResult } from "../explorer/DocumentView";
 import { ILineEditChangeEvent } from "@ff/ui/LineEdit";

@@ -303,7 +303,10 @@
 	"Please activate the tour button in the main menu." : "Please activate the tour button in the main menu. - spanish",
 	"OK" : "OK - spanish",
 	"Missing content" : "Contenido faltante",
-	"Start by creating a tour step" : "Start by creating a tour step - spanish"
+	"Start by creating a tour step" : "Start by creating a tour step - spanish",
+	"Start by creating a tour step." : "Start by creating a tour step. - spanish",
+	"Create or select a state change to edit." : "Create or select a state change to edit. - spanish",
+	"Record" : "Record - spanish"
 
 
 }

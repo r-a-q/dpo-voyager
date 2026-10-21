@@ -74,7 +74,7 @@ export default class TaskPanel extends SystemView
         return html`
             <div class="sv-panel-header">
                 <ff-icon name=${task.icon}></ff-icon>
-                <div class="ff-text">${languageManager.getUILocalizedString(task.text)}</div>
+                <div class="ff-text">${task.text}</div>
             </div>
             <div class="sv-panel-content">
                 ${viewElement}

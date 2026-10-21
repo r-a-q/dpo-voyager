@@ -20,6 +20,7 @@ import System from "@ff/graph/System";
 import SystemView, { customElement, html } from "@ff/scene/ui/SystemView";
 
 import CVTaskProvider, { IActiveTaskEvent } from "../../components/CVTaskProvider";
+import CVLanguageManager from "../../components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -30,6 +31,7 @@ import CVTaskProvider, { IActiveTaskEvent } from "../../components/CVTaskProvide
 export default class TaskPanel extends SystemView
 {
     protected taskProvider: CVTaskProvider = null;
+    protected language: CVLanguageManager = null;
 
     constructor(system?: System)
     {
@@ -67,11 +69,12 @@ export default class TaskPanel extends SystemView
         }
 
         const viewElement = task.createView();
+        const languageManager = this.language;
 
         return html`
             <div class="sv-panel-header">
                 <ff-icon name=${task.icon}></ff-icon>
-                <div class="ff-text">${task.text}</div>
+                <div class="ff-text">${languageManager.getUILocalizedString(task.text)}</div>
             </div>
             <div class="sv-panel-content">
                 ${viewElement}

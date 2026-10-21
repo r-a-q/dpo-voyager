@@ -40,7 +40,7 @@ export default class Annotation extends Document<IAnnotation, IAnnotation>
             this.data.titles[ELanguageType[this.language]] = this.data.title;
         }
 
-        return this.data.titles[ELanguageType[this.language]] || "Missing content";
+        return this.data.titles[ELanguageType[this.language]] || `Missing Content`;
     }
 
     set title(inTitle: string) {
@@ -64,7 +64,7 @@ export default class Annotation extends Document<IAnnotation, IAnnotation>
 
         const hasAltContent = Object.keys(this.data.leads).some(key => this.data.leads[key] && key !== ELanguageType[this.language]);
 
-        return this.data.leads[ELanguageType[this.language]] || (hasAltContent ? "Missing content" : "");
+        return this.data.leads[ELanguageType[this.language]] || (hasAltContent ? `Missing Content` : "");
     }
     set lead(inLead: string) {
         this.data.leads[ELanguageType[this.language]] = inLead;
@@ -81,7 +81,7 @@ export default class Annotation extends Document<IAnnotation, IAnnotation>
         const hasAltContent = Object.keys(this.data.taglist).some(key => this.data.taglist[key].length > 0 && key !== ELanguageType[this.language]);
 
         return this.data.taglist[ELanguageType[this.language]] && this.data.taglist[ELanguageType[this.language]].length > 0 ? 
-            this.data.taglist[ELanguageType[this.language]] : (hasAltContent ? ["Missing content"] : []);
+            this.data.taglist[ELanguageType[this.language]] : (hasAltContent ? [`Missing Content`] : []);
     }
     set tags(inTags: string[]) {
         this.data.taglist[ELanguageType[this.language]] = inTags;

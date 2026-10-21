@@ -292,7 +292,9 @@
 	"Trigger/Action combination not supported for accessibility" : "Trigger/Action combination not supported for accessibility - spanish",
 	"Please select a model node to edit its actions" : "Please select a model node to edit its actions - spanish",
 	"CAUTION: We recommend using traditional tour steps for tour-based state changes." : "CAUTION: We recommend using traditional tour steps for tour-based state changes. - spanish",
-	"State Editor based changes may have unintended consequences." : "State Editor based changes may have unintended consequences. - spanish"
+	"State Editor based changes may have unintended consequences." : "State Editor based changes may have unintended consequences. - spanish",
+	"Unable to load - Only .jpg and .png files are currently supported." : "Unable to load - Only .jpg and .png files are currently supported. - spanish",
+	"Image file upload failed." : "Image file upload failed. - spanish"
 
 
 }

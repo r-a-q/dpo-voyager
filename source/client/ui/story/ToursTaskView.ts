@@ -29,6 +29,8 @@ import CVDocument from "../../components/CVDocument";
 import { IButtonClickEvent } from "@ff/ui/Button";
 import { ELanguageType } from "client/schema/common";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -70,11 +72,13 @@ export default class ToursTaskView extends TaskView<CVToursTask>
         const task = this.task;
         const tours = task.tours;
 
+        const languageManager = this.activeDocument.setup.language;
+
         if (!tours) {
-            return html`<div class="sv-placeholder">Please select a document to edit its tours.</div>`;
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please select a document to edit its tours.")}</div>`;
         }
         if (!tours.ins.enabled.value) {
-            return html`<div class="sv-placeholder">Please activate the tour button in the main menu.</div>`;
+            return html`<div class="sv-placeholder">${languageManager.getUILocalizedString("Please activate the tour button in the main menu.")}</div>`;
         }
 
         if (this.featureConfigMode) {
@@ -84,7 +88,6 @@ export default class ToursTaskView extends TaskView<CVToursTask>
         const tourList = tours.tours;
         const activeTour = tours.activeTour;
         const props = task.ins;
-        const languageManager = this.activeDocument.setup.language;
         const activeLanguage = ELanguageType[languageManager.ins.activeLanguage.value];
         const primarySceneLanguage = ELanguageType[languageManager.ins.primarySceneLanguage.value];
 
@@ -109,7 +112,7 @@ export default class ToursTaskView extends TaskView<CVToursTask>
                 <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item">${languageManager.getUILocalizedString("Default:") + " " + primarySceneLanguage}</div><div class="sv-panel-header sv-task-item sv-item-border-l">${languageManager.getUILocalizedString("Active:") + " " + activeLanguage}</div></div>
                 <div class="ff-splitter-section" style="flex-basis: 30%">
                     <div class="ff-scroll-y ff-flex-column">
-                        <sv-tour-list .data=${tourList.slice()} .selectedItem=${activeTour} .activeLanguage=${activeLanguage} .primarySceneLanguage=${primarySceneLanguage} @select=${this.onSelectTour}></sv-tour-list>
+                        <sv-tour-list .data=${tourList.slice()} .selectedItem=${activeTour} .activeLanguage=${activeLanguage} .primarySceneLanguage=${primarySceneLanguage} .languageManager=${languageManager} @select=${this.onSelectTour}></sv-tour-list>
                     </div>
                 </div>
                 <ff-splitter direction="vertical"></ff-splitter>
@@ -227,6 +230,9 @@ export class TourList extends List<ITour>
     @property({ attribute: false })
     selectedItem: ITour = null;
 
+    @property({ attribute: false})
+    languageManager: CVLanguageManager = null;
+
     @property({ attribute: false })
     activeLanguage: ELanguageType = null;
 
@@ -247,7 +253,7 @@ export class TourList extends List<ITour>
         }
         const primaryTitle = item.titles[this.primarySceneLanguage];
         const activeTitle = item.titles[this.activeLanguage];
-        const missingTitle = html `<span class="sv-missing-translation">Missing content</span>`
+        const missingTitle = html `<span class="sv-missing-translation">${this.languageManager.getUILocalizedString("Missing Content")}</span>`
         
         return html`<div class="ff-flex-row ff-group">
         <div class="sv-task-item">${primaryTitle? primaryTitle : missingTitle}</div>

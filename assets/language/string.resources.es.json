@@ -297,7 +297,12 @@
 	"Image file upload failed." : "Image file upload failed. - spanish",
 	"Select Import Type:" : "Select Import Type: - spanish",
 	"Import Image" : "Import Image - spanish",
-		"File:" : "Archivo:",
-		"Default:" : "Por defecto:"
+	"File:" : "Archivo:",
+	"Default:" : "Por defecto:",
+	"Please select a document to edit its tours." : "Please select a document to edit its tours. - spanish",
+	"Please activate the tour button in the main menu." : "Please activate the tour button in the main menu. - spanish",
+	"OK" : "OK - spanish",
+	"Missing content" : "Contenido faltante"
+
 
 }

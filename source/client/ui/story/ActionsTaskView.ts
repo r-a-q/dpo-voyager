@@ -65,11 +65,11 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
 
         const accessibilityNotice = ins.type.value === EActionType.PlayAudio && 
             (ins.trigger.value === EActionTrigger.OnTourStep || ins.trigger.value === EActionTrigger.OnLoad) ?
-            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("Trigger/Action combination not supported for accessibility")}.</div>` : null;
+            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("Trigger/Action combination not supported for accessibility.")}</div>` : null;
 
         const stateChangeWarning = ins.type.value === EActionType.StateChange && 
             ins.trigger.value === EActionTrigger.OnTourStep ?
-            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("CAUTION: We recommend using traditional tour steps for tour-based state changes.")} +
+            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("CAUTION: We recommend using traditional tour steps for tour-based state changes.")} 
                 ${languageManager.getUILocalizedString("State Editor based changes may have unintended consequences.")}</div>` : null;
 
         const actionElement = actionList.find((action) => action.id === ins.activeId.value);

@@ -24,6 +24,7 @@ import Table, { ITableColumn, ITableRowClickEvent } from "@ff/ui/Table";
 import CVDocument from "../../components/CVDocument";
 import CVTours from "../../components/CVTours";
 import CVToursTask from "../../components/CVToursTask";
+import CVLanguageManager from "../../components/CVLanguageManager";
 
 import DocumentView, { customElement, html, TemplateResult } from "../explorer/DocumentView";
 import { ILineEditChangeEvent } from "@ff/ui/LineEdit";
@@ -51,6 +52,8 @@ export default class TourPanel extends DocumentView
 
     protected stateTable: Table<IStepEntry> = null;
     protected subscriber: Subscriber = null;
+    //protected language: CVLanguageManager = null;
+    
     tours: CVTours = null;
 
     protected get toursTask() {
@@ -64,7 +67,7 @@ export default class TourPanel extends DocumentView
 
         this.stateTable = new Table();
         this.stateTable.columns = TourPanel.tableColumns;
-        this.stateTable.placeholder = "Start by creating a tour step.";
+        //this.stateTable.placeholder = "Start by creating a tour step.";
         this.stateTable.addEventListener("rowclick", this.onClickTableRow.bind(this));
 
         this.subscriber = new Subscriber("value", this.onUpdate, this);
@@ -102,32 +105,33 @@ export default class TourPanel extends DocumentView
         const tours = this.tours;
         const machine = tours.snapshots;
         const languageManager = this.activeDocument.setup.language;
+        this.stateTable.placeholder = `${languageManager.getUILocalizedString("Start by creating a tour step")}.`;
 
         if (!task || !tours.ins.enabled.value) {
-            return html`<div class="ff-placeholder">${languageManager.getUILocalizedString("Tour edit task not available.")}</div>`;
+            return html`<div class="ff-placeholder">${languageManager.getUILocalizedString("Tour edit task not available")}.</div>`; //RAQ - have "." outside translation?
         }
 
         //if (!task.outs.isActive.value) {
-        //    return html`<div class="ff-placeholder">Please select 'Tours' from the task menu to edit tours.</div>`;
+        //    return html`<div class="ff-placeholder">${languageManager.getUILocalizedString("Please select 'Tours' from the task menu to edit tours.")}</div>`;
         //}
 
         const tour = tours.activeTour;
 
         if (!tour) {
-            return html`<div class="ff-placeholder">${languageManager.getUILocalizedString("Please create or select a tour to edit.")}</div>`;
+            return html`<div class="ff-placeholder">${languageManager.getUILocalizedString("Please create or select a tour to edit")}.</div>`;
         }
 
         const activeStep = tours.activeStep;
-        const missingTitle = html `<span class="sv-missing-translation">Missing content</span>`
+        const missingTitle = html `<span class="sv-missing-translation">${languageManager.getUILocalizedString("Missing Content")}</span>`
      
         const stepDetailView = activeStep ? html`<div class="ff-scroll-y ff-flex-column sv-detail-view">
             <sv-property-view .property=${task.ins.stepTitle}></sv-property-view>
             <sv-property-view .property=${task.ins.stepCurve}></sv-property-view>
             <sv-property-view .property=${task.ins.stepDuration} commitonly></sv-property-view>
             <sv-property-view .property=${task.ins.stepThreshold} commitonly></sv-property-view>
-            <div class="sv-label">Alt Text</div>
+            <div class="sv-label">${languageManager.getUILocalizedString("Alt Text")}</div>
             <ff-text-edit name="altText" text=${task.ins.stepAltText.value} @change=${this.onTextEdit}></ff-text-edit>
-        </div>` : html`<div class="ff-placeholder"><div>${languageManager.getUILocalizedString("Create or select a tour step to edit.")}</div></div>`;
+        </div>` : html`<div class="ff-placeholder"><div>${languageManager.getUILocalizedString("Create or select a tour step to edit")}.</div></div>`;
 
         this.stateTable.rows = tours.activeSteps.map(step => {
             const state = machine.getState(step.id);

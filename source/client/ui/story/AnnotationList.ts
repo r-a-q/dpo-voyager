@@ -40,6 +40,9 @@ class AnnotationList extends List<Annotation>
     @property({ attribute: false })
     selectedItem: Annotation = null;
 
+    @property({ attribute: false})
+    languageManager: CVLanguageManager = null;
+
     @property({type: ELanguageType})
     activeLanguage: ELanguageType = ELanguageType[DEFAULT_LANGUAGE];
 
@@ -56,8 +59,7 @@ class AnnotationList extends List<Annotation>
     {
         const primaryTitle = item.titleIn(this.primarySceneLanguage);
         const activeTitle = item.titleIn(this.activeLanguage);
-        //const languageManager = this.language;
-        const missingTitle = html `<span class="sv-missing-translation">Missing Content</span>`
+        const missingTitle = html `<span class="sv-missing-translation">${this.languageManager.getUILocalizedString("Missing Content")}</span>`
         return html`<div class="ff-flex-row ff-group">
             <div class="sv-task-item">${ primaryTitle? primaryTitle : missingTitle}</div>
             <div class="sv-task-item sv-item-border-l">${activeTitle ? activeTitle : missingTitle}

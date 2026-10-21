@@ -294,7 +294,9 @@
 	"CAUTION: We recommend using traditional tour steps for tour-based state changes." : "CAUTION: We recommend using traditional tour steps for tour-based state changes. - spanish",
 	"State Editor based changes may have unintended consequences." : "State Editor based changes may have unintended consequences. - spanish",
 	"Unable to load - Only .jpg and .png files are currently supported." : "Unable to load - Only .jpg and .png files are currently supported. - spanish",
-	"Image file upload failed." : "Image file upload failed. - spanish"
-
+	"Image file upload failed." : "Image file upload failed. - spanish",
+	"Select Import Type:" : "Select Import Type: - spanish",
+	"Import Image" : "Import Image - spanish",
+		"File:" : "Archivo:"
 
 }

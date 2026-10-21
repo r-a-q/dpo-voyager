@@ -93,24 +93,24 @@ export default class ImageImportMenu extends Popup
 
     protected render()
     {
-        const language = this.language;
+        const languageManager = this.language;
 
         const modelSelect = this.type === "overlay" ? html`<div class="ff-flex-row">
-                <div class="ff-flex-spacer ff-header">${language.getUILocalizedString("Select Model:")}</div>
+                <div class="ff-flex-spacer ff-header">${languageManager.getUILocalizedString("Select Model:")}</div>
             </div>
             ${this.modelOptions.length > 0 ? html`
                 ${this.modelOptions.map((option, index) => this.renderParentEntry(option.name, index))}` 
-            : html`<div class="ff-flex-row sv-centered sv-notification" style="height:100%; align-items:center">${language.getUILocalizedString("No Models In Scene")}</div>`}` : null;
+            : html`<div class="ff-flex-row sv-centered sv-notification" style="height:100%; align-items:center">${languageManager.getUILocalizedString("No Models In Scene")}</div>`}` : null;
 
         return html`
         <div>
             <div class="ff-flex-column ff-fullsize">
                 <div class="ff-flex-row">
-                    <div class="ff-flex-spacer ff-title">${language.getUILocalizedString("File:")} <i>${this.filename}</i></div>
-                    <ff-button icon="close" transparent class="ff-close-button" title=${language.getUILocalizedString("Close")} @click=${this.close}></ff-button>
+                    <div class="ff-flex-spacer ff-title">${languageManager.getUILocalizedString("File:")} <i>${this.filename}</i></div>
+                    <ff-button icon="close" transparent class="ff-close-button" title=${languageManager.getUILocalizedString("Close")} @click=${this.close}></ff-button>
                 </div>
                 <div class="ff-flex-row">
-                    <div class="ff-flex-spacer ff-header">${language.getUILocalizedString("Select Import Type:")}</div>
+                    <div class="ff-flex-spacer ff-header">${languageManager.getUILocalizedString("Select Import Type:")}</div>
                 </div>
                 <div class="ff-flex-row ff-splitter-section">
                     <div class="ff-scroll-y" role="listbox">
@@ -122,7 +122,7 @@ export default class ImageImportMenu extends Popup
                     </div>
                 </div>
                 <div class="ff-flex-row sv-centered">
-                    <ff-button icon="upload" class="ff-button ff-control" text=${language.getUILocalizedString("Import Image")} title=${language.getUILocalizedString("Import Model")} @click=${this.confirm}></ff-button>
+                    <ff-button icon="upload" class="ff-button ff-control" text=${languageManager.getUILocalizedString("Import Image")} title=${languageManager.getUILocalizedString("Import Model")} @click=${this.confirm}></ff-button>
                 </div>
                 <div class="ff-flex-row sv-centered sv-import-error-msg">
                     <div>${this.errorString}</div>

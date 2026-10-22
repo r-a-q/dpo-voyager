@@ -27,7 +27,6 @@ import CVSettingsTask from "../../components/CVSettingsTask";
 import { TaskView } from "../../components/CVTask";
 import NVNode from "../../nodes/NVNode";
 
-import CVLanguageManager from "../../components/CVLanguageManager";
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-settings-task-view")

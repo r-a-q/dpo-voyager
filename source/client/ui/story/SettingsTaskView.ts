@@ -27,6 +27,7 @@ import CVSettingsTask from "../../components/CVSettingsTask";
 import { TaskView } from "../../components/CVTask";
 import NVNode from "../../nodes/NVNode";
 
+import CVLanguageManager from "../../components/CVLanguageManager";
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-settings-task-view")
@@ -44,7 +45,7 @@ export default class SettingsTaskView extends TaskView<CVSettingsTask>
         }
 
         return html`<div class="ff-flex-item-stretch ff-scroll-y">
-            <sv-settings-tree .node=${node}></sv-settings-tree>
+            <sv-settings-tree .node=${node} .languageManager=${languageManager}></sv-settings-tree>
         </div>`;
     }
 
@@ -71,6 +72,9 @@ export class SettingsTree extends Tree<ITreeNode>
     @property({ attribute: false })
     node: NVNode = null;
 
+    @property({ attribute: false })
+    languageManager: any = null;
+
     protected firstConnected()
     {
         super.firstConnected();
@@ -94,7 +98,7 @@ export class SettingsTree extends Tree<ITreeNode>
     protected renderNodeHeader(node: ITreeNode)
     {
         if (!node.property) {
-            return html`<div class="ff-text ff-label ff-ellipsis">${node.text}</div>`;
+            return html`<div class="ff-text ff-label ff-ellipsis">${this.languageManager.getUILocalizedString(node.text)}</div>`;
         }
 
         const component = node.property.group?.linkable;

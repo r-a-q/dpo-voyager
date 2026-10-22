@@ -306,7 +306,8 @@
 	"Start by creating a tour step" : "Start by creating a tour step - spanish",
 	"Start by creating a tour step." : "Start by creating a tour step. - spanish",
 	"Create or select a state change to edit." : "Create or select a state change to edit. - spanish",
-	"Record" : "Record - spanish"
-
+	"Record" : "Record - spanish",
+	"Please select a node to display its properties." : "Please select a node to display its properties. - spanish",
+	"Transform" : "Transform - spanish"
 
 }

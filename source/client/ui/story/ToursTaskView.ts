@@ -52,7 +52,7 @@ export default class ToursTaskView extends TaskView<CVToursTask>
         const buttons = keys.map(key => {
             const title = key[0].toUpperCase() + key.substr(1);
             const selected = !!features[key];
-            return html`<ff-button text=${title} name=${key} ?disabled=${key === "navigation"} ?selected=${selected} @click=${this.onClickFeature}></ff-button>`;
+            return html`<ff-button text=${languageManager.getUILocalizedString(title)} name=${key} ?disabled=${key === "navigation"} ?selected=${selected} @click=${this.onClickFeature}></ff-button>`;
         });
 
         return html`<div class="sv-commands">

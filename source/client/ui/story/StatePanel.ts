@@ -96,7 +96,8 @@ export default class StatePanel extends DocumentView
 
         const machine = this.snapshots;
         const languageManager = this.activeDocument.setup.language;
-        this.stateTable.placeholder = "Start by creating a tour step.";
+        this.stateTable.placeholder = `${languageManager.getUILocalizedString("Start by creating a tour step.")}`;
+        this.stateTable.columns
         const activeState = this.activeState;
 
         const tagDisplay = activeState ? html`<div class="sv-property-tags"><div class="sv-tags-selected">

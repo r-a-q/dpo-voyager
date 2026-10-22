@@ -27,6 +27,8 @@ import CVSettingsTask from "../../components/CVSettingsTask";
 import { TaskView } from "../../components/CVTask";
 import NVNode from "../../nodes/NVNode";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-settings-task-view")
@@ -72,7 +74,7 @@ export class SettingsTree extends Tree<ITreeNode>
     node: NVNode = null;
 
     @property({ attribute: false })
-    languageManager: any = null;
+    languageManager: CVLanguageManager = null;
 
     protected firstConnected()
     {
@@ -104,7 +106,7 @@ export class SettingsTree extends Tree<ITreeNode>
         const nonEditableProperties: string[] = component["nonEditableProperties"] || [];
         const disabled = nonEditableProperties.includes(node.property.path);
 
-        return html`<sv-property-view .property=${node.property} ?disabled=${disabled}></sv-property-view>`;
+        return html`<sv-property-view .property=${node.property} .languageManager=${this.languageManager} ?disabled=${disabled}></sv-property-view>`;
     }
 
     protected createNodeTreeNode(node: Node): ITreeNode

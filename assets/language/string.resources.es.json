@@ -324,6 +324,9 @@
 	"Please select a scene or model to display its notes." : "Please select a scene or model to display its notes. - spanish",
 	"No notes available." : "No notes available. - spanish",
 	"Scene" : "Scene - spanish",
-	"Documents" : "Documents - spanish"
+	"Documents" : "Documents - spanish",
+	"Please select derivative quality." : "Por favor, selecciona la calidad del derivado.",
+	"Select Derivative Quality:" : "Por favor, selecciona la calidad del derivado:",
+	"Select Model:" : "Seleccionar modelo:"
 
 }

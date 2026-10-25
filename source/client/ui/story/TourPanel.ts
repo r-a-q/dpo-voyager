@@ -41,13 +41,13 @@ interface IStepEntry
 @customElement("sv-tour-panel")
 export default class TourPanel extends DocumentView
 {
-    protected static tableColumns: ITableColumn<IStepEntry>[] = [
-        { header: "#", width: 0.05, cell: (row, index) => (index + 1).toString() },
-        { header: "Title", width: 0.4, cell: "title" },
-        { header: "Curve", width: 0.25, cell: "curve" },
-        { header: "Duration", width: 0.15, cell: "duration" },
-        { header: "Threshold", width: 0.15, cell: "threshold" },
-    ];
+    // protected static tableColumns: ITableColumn<IStepEntry>[] = [
+    //     { header: "#", width: 0.05, cell: (row, index) => (index + 1).toString() },
+    //     { header: "Title", width: 0.4, cell: "title" },
+    //     { header: "Curve", width: 0.25, cell: "curve" },
+    //     { header: "Duration", width: 0.15, cell: "duration" },
+    //     { header: "Threshold", width: 0.15, cell: "threshold" },
+    // ];
 
     protected stateTable: Table<IStepEntry> = null;
     protected subscriber: Subscriber = null;
@@ -65,7 +65,7 @@ export default class TourPanel extends DocumentView
         this.classList.add("sv-panel", "sv-tour-panel");
 
         this.stateTable = new Table();
-        this.stateTable.columns = TourPanel.tableColumns;
+        //this.stateTable.columns = TourPanel.tableColumns;
         //this.stateTable.placeholder = "Start by creating a tour step.";
         this.stateTable.addEventListener("rowclick", this.onClickTableRow.bind(this));
 
@@ -116,6 +116,14 @@ export default class TourPanel extends DocumentView
 
         const tour = tours.activeTour;
 
+        this.stateTable.columns = [
+        { header: "#", width: 0.05, cell: (row, index) => (index + 1).toString() },
+        { header: `${languageManager.getUILocalizedString("Title")}`, width: 0.4, cell: "title" },
+        { header: `${languageManager.getUILocalizedString("Curve")}`, width: 0.25, cell: "curve" },
+        { header: `${languageManager.getUILocalizedString("Duration")}`, width: 0.15, cell: "duration" },
+        { header: `${languageManager.getUILocalizedString("Threshold")}`, width: 0.15, cell: "threshold" },
+    ];
+
         if (!tour) {
             return html`<div class="ff-placeholder">${languageManager.getUILocalizedString("Please create or select a tour to edit")}.</div>`;
         }
@@ -124,10 +132,10 @@ export default class TourPanel extends DocumentView
         const missingTitle = html `<span class="sv-missing-translation">${languageManager.getUILocalizedString("Missing Content")}</span>`
      
         const stepDetailView = activeStep ? html`<div class="ff-scroll-y ff-flex-column sv-detail-view">
-            <sv-property-view .property=${task.ins.stepTitle}></sv-property-view>
-            <sv-property-view .property=${task.ins.stepCurve}></sv-property-view>
-            <sv-property-view .property=${task.ins.stepDuration} commitonly></sv-property-view>
-            <sv-property-view .property=${task.ins.stepThreshold} commitonly></sv-property-view>
+            <sv-property-view .property=${task.ins.stepTitle} .languageManager=${languageManager}></sv-property-view>
+            <sv-property-view .property=${task.ins.stepCurve} .languageManager=${languageManager}></sv-property-view>
+            <sv-property-view .property=${task.ins.stepDuration} .languageManager=${languageManager} commitonly></sv-property-view>
+            <sv-property-view .property=${task.ins.stepThreshold} .languageManager=${languageManager} commitonly></sv-property-view>
             <div class="sv-label">${languageManager.getUILocalizedString("Alt Text")}</div>
             <ff-text-edit name="altText" text=${task.ins.stepAltText.value} @change=${this.onTextEdit}></ff-text-edit>
         </div>` : html`<div class="ff-placeholder"><div>${languageManager.getUILocalizedString("Create or select a tour step to edit")}.</div></div>`;

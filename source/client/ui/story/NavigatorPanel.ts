@@ -21,12 +21,14 @@ import "./DocumentList";
 import "./NodeTree";
 
 import CVTaskProvider from "../../components/CVTaskProvider";
+import CVLanguageManager from "../../components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-navigator-panel")
 export default class NavigatorPanel extends SystemView
 {
+    //protected language: CVLanguageManager = null;
     protected get taskProvider() {
         return this.system.getMainComponent(CVTaskProvider);
     }
@@ -39,11 +41,17 @@ export default class NavigatorPanel extends SystemView
     protected connected()
     {
         this.taskProvider.ins.mode.on("value", this.performUpdate, this);
+        this.languageManager.outs.uiLanguage.on("value", this.onUpdate, this);
     }
 
     protected disconnected()
     {
         this.taskProvider.ins.mode.off("value", this.performUpdate, this);
+        this.languageManager.outs.uiLanguage.on("value", this.onUpdate, this);
+    }
+    
+    protected get languageManager() {
+        return this.system.getComponent(CVLanguageManager);
     }
 
     protected render()
@@ -54,7 +62,7 @@ export default class NavigatorPanel extends SystemView
         const documentList = expertMode ? html`<div class="ff-splitter-section ff-flex-column" style="flex-basis: 30%">
             <div class="sv-panel-header">
                 <ff-icon name="document"></ff-icon>
-                <div class="ff-text">Documents</div>
+                <div class="ff-text">${this.languageManager.getUILocalizedString("Documents")}</div>
             </div>
             <div class="ff-flex-item-stretch"><div class="ff-scroll-y">
                 <sv-document-list .system=${system}></sv-document-list>
@@ -66,7 +74,7 @@ export default class NavigatorPanel extends SystemView
             <div class="ff-splitter-section ff-flex-column" style="flex-basis: 70%">
                 <div class="sv-panel-header">
                     <ff-icon name="hierarchy"></ff-icon>
-                    <div class="ff-text">Nodes</div>
+                    <div class="ff-text">${this.languageManager.getUILocalizedString("Nodes")}</div>
                 </div>
                 <sv-node-tree class="ff-flex-item-stretch" .system=${system}></sv-node-tree>
             </div>`;

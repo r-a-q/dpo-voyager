@@ -309,6 +309,21 @@
 	"Record" : "Record - spanish",
 	"Please select a node to display its properties." : "Please select a node to display its properties. - spanish",
 	"Transform" : "Transform - spanish",
-	"Time Zone" : "Time Zone - spanish"
+	"Time Zone" : "Time Zone - spanish",
+	"Overlay Images" : "Overlay Images - spanish",
+	"Fill All" : "Fill All - spanish",
+	"Clear All" : "Clear All - spanish",
+	"Interact" : "Interact - spanish",
+	"Paint" : "Paint - spanish",
+	"Erase" : "Erase - spanish",
+	"Painting Tools" : "Painting Tools - spanish",
+	"Overlay Editing" : "Overlay Editing - spanish",
+	"Derivative" : "Derivative - spanish",
+	"Please select a model to edit its overlays." : "Please select a model to edit its overlays. - spanish",
+	"Select or create a note to edit it." : "Select or create a note to edit it. - spanish",
+	"Please select a scene or model to display its notes." : "Please select a scene or model to display its notes. - spanish",
+	"No notes available." : "No notes available. - spanish",
+	"Scene" : "Scene - spanish",
+	"Documents" : "Documents - spanish"
 
 }

@@ -59,7 +59,7 @@ class NodeTree extends Tree<NVNode>
         this.nodeProvider = this.system.getMainComponent(CVNodeProvider);
     }
 
-    protected get language() {
+    protected get languageManager() {
         return this.system.getComponent(CVLanguageManager);
     }
 
@@ -69,7 +69,7 @@ class NodeTree extends Tree<NVNode>
         this.documentProvider.on<IActiveDocumentEvent>("active-component", this.onUpdate, this);
         this.nodeProvider.on<IActiveNodeEvent>("active-node", this.onActiveNode, this);
         this.nodeProvider.on<INodesEvent>("scoped-nodes", this.onUpdate, this);
-        this.language.outs.uiLanguage.on("value", this.onUpdate, this);
+        this.languageManager.outs.uiLanguage.on("value", this.onUpdate, this);
         this.system.components.on(CLight, this.onLightNode, this);
 
     }
@@ -80,7 +80,7 @@ class NodeTree extends Tree<NVNode>
         this.nodeProvider.off<INodesEvent>("scoped-nodes", this.onUpdate, this);
         this.nodeProvider.off<IActiveNodeEvent>("active-node", this.onActiveNode, this);
         this.documentProvider.off<IActiveDocumentEvent>("active-component", this.onUpdate, this);
-        this.language.outs.uiLanguage.on("value", this.onUpdate, this);
+        this.languageManager.outs.uiLanguage.on("value", this.onUpdate, this);
         this.unregisterLightNodes();
 
         super.disconnected();
@@ -115,12 +115,12 @@ class NodeTree extends Tree<NVNode>
             icons.push(html`<ff-icon class="sv-icon-model" name=${node.model.icon}></ff-icon>`);
         }
         if (node.name === "Lights") {
-            buttons.push(html`<ff-button icon="create" title="${this.language.getUILocalizedString("Create Light")}" class="sv-add-light-btn" @click=${(e: MouseEvent) => this.onClickAddLight(e, node)}></ff-button>`);
+            buttons.push(html`<ff-button icon="create" title="${this.languageManager.getUILocalizedString("Create Light")}" class="sv-add-light-btn" @click=${(e: MouseEvent) => this.onClickAddLight(e, node)}></ff-button>`);
         }
         if (node.light) {
             icons.push(html`<ff-icon class="${node.light.ins.enabled.value ? "sv-icon-light ff-icon": "sv-icon-disabled ff-icon"}" name=${node.light.icon}></ff-icon>`);
             if(node.light.canDelete) {
-                buttons.push(html`<ff-button icon="trash" title="${this.language.getUILocalizedString("Delete Light")}" class="sv-delete-light-btn" @click=${(e: MouseEvent) => this.onClickDeleteLight(e, node)}></ff-button>`);
+                buttons.push(html`<ff-button icon="trash" title="${this.languageManager.getUILocalizedString("Delete Light")}" class="sv-delete-light-btn" @click=${(e: MouseEvent) => this.onClickDeleteLight(e, node)}></ff-button>`);
             }
         }
         if (node.camera) {
@@ -130,7 +130,7 @@ class NodeTree extends Tree<NVNode>
             icons.push(html`<ff-icon class="sv-icon-meta" name=${node.meta.icon}></ff-icon>`);
         }
 
-        return html`${icons}<div class="ff-text ff-ellipsis">${node.displayName}</div>${buttons}`;
+        return html`${icons}<div class="ff-text ff-ellipsis">${this.languageManager.getUILocalizedString(`${node.displayName}`)}</div>${buttons}`;
     }
 
     protected isNodeSelected(node: NVNode): boolean

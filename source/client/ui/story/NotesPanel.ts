@@ -38,18 +38,17 @@ import NVNode from "../../nodes/NVNode";
 import CVMeta from "../../components/CVMeta";
 
 ////////////////////////////////////////////////////////////////////////////////
-
 @customElement("sv-notes-panel")
 export default class NotesPanel extends NodeView
 {
-    protected static tableColumns: ITableColumn<INote>[] = [
-        { header: "Date", width: 0.3,
-            cell: row => moment(row.date).format("YYYY-MM-DD HH:mm:ss"),
-            sortable: true
-        },
-        { header: "User", width: 0.25, cell: "user", sortable: true },
-        { header: "Text", width: 0.45, cell: "text", sortable: true },
-    ];
+    // protected static tableColumns: ITableColumn<INote>[] = [
+    //     { header: "Date", width: 0.3,
+    //         cell: row => moment(row.date).format("YYYY-MM-DD HH:mm:ss"),
+    //         sortable: true
+    //     },
+    //     { header: `${languageManager.getUILocalizedString("User")}`, width: 0.25, cell: "user", sortable: true },
+    //     { header: "Text", width: 0.45, cell: "text", sortable: true },
+    // ];
 
     protected noteTable: Table<INote>;
 
@@ -61,8 +60,7 @@ export default class NotesPanel extends NodeView
         super(system);
 
         this.noteTable = new Table<INote>();
-        this.noteTable.columns = NotesPanel.tableColumns;
-        this.noteTable.placeholder = "No notes available.";
+        //this.noteTable.columns = NotesPanel.tableColumns;
         this.noteTable.addEventListener("rowclick", this.onClickTableRow.bind(this));
     }
 
@@ -88,6 +86,15 @@ export default class NotesPanel extends NodeView
     {
         const languageManager = this.activeDocument.setup.language;
 
+        this.noteTable.columns = [
+        { header: `${languageManager.getUILocalizedString("Date")}`, width: 0.3,
+            cell: row => moment(row.date).format("YYYY-MM-DD HH:mm:ss"),
+            sortable: true
+        },
+        { header: `${languageManager.getUILocalizedString("User")}`, width: 0.25, cell: "user", sortable: true },
+        { header: `${languageManager.getUILocalizedString("Text")}`, width: 0.45, cell: "text", sortable: true },
+    ];
+
         if (!note) {
             return html`<div class="ff-placeholder">
                 <div>${languageManager.getUILocalizedString("Select or create a note to edit it.")}</div>
@@ -109,8 +116,11 @@ export default class NotesPanel extends NodeView
         if(!this.activeDocument) {
             return;
         }
+        
         const languageManager = this.activeDocument.setup.language;
         const node = this.activeNode;
+
+        this.noteTable.placeholder = `${languageManager.getUILocalizedString("No notes available.")}`;
 
         if (!node || !(node.scene || node.model)) {
             return html`<div class="ff-placeholder">

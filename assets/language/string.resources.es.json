@@ -327,6 +327,11 @@
 	"Documents" : "Documents - spanish",
 	"Please select derivative quality." : "Por favor, selecciona la calidad del derivado.",
 	"Select Derivative Quality:" : "Por favor, selecciona la calidad del derivado:",
-	"Select Model:" : "Seleccionar modelo:"
+	"Select Model:" : "Seleccionar modelo:",
+	"Please select model to overlay." : "Please select model to overlay. - spanish",
+	"Environment Map" : "Environment Map - spanish",
+	"Overlay Map" : "Overlay Map - spanish",
+	"Image Plane" : "Image Plane - spanish",
+	"Misc Asset" : "Misc Asset - spanish"
 
 }

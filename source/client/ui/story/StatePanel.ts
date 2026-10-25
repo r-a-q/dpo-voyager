@@ -41,12 +41,12 @@ interface IStepEntry
 @customElement("sv-state-panel")
 export default class StatePanel extends DocumentView
 {
-    protected static tableColumns: ITableColumn<IStepEntry>[] = [
-        { header: "#", width: 0.05, cell: (row, index) => (index + 1).toString() },
-        { header: "Title", width: 0.4, cell: "title" },
-        { header: "Duration", width: 0.15, cell: "duration" },
-        { header: "Changes", width: 0.4, cell: "changes" },
-    ];
+    // protected static tableColumns: ITableColumn<IStepEntry>[] = [
+    //     { header: "#", width: 0.05, cell: (row, index) => (index + 1).toString() },
+    //     { header: "Title", width: 0.4, cell: "title" },
+    //     { header: "Duration", width: 0.15, cell: "duration" },
+    //     { header: "Changes", width: 0.4, cell: "changes" },
+    // ];
 
     protected stateTable: Table<IStepEntry> = null;
     protected subscriber: Subscriber = null;
@@ -67,7 +67,7 @@ export default class StatePanel extends DocumentView
         this.classList.add("sv-panel", "sv-state-panel");
 
         this.stateTable = new Table();
-        this.stateTable.columns = StatePanel.tableColumns;
+        //this.stateTable.columns = StatePanel.tableColumns;
         
         this.stateTable.addEventListener("rowclick", this.onClickTableRow.bind(this));
 
@@ -97,8 +97,15 @@ export default class StatePanel extends DocumentView
         const machine = this.snapshots;
         const languageManager = this.activeDocument.setup.language;
         this.stateTable.placeholder = `${languageManager.getUILocalizedString("Start by creating a tour step.")}`;
-        this.stateTable.columns
+        //this.stateTable.columns
         const activeState = this.activeState;
+
+        this.stateTable.columns = [
+        { header: "#", width: 0.05, cell: (row, index) => (index + 1).toString() },
+        { header: `${languageManager.getUILocalizedString("Title")}`, width: 0.4, cell: "title" },
+        { header: `${languageManager.getUILocalizedString("Duration")}`, width: 0.15, cell: "duration" },
+        { header: `${languageManager.getUILocalizedString("Changes")}`, width: 0.4, cell: "changes" },
+    ];
 
         const tagDisplay = activeState ? html`<div class="sv-property-tags"><div class="sv-tags-selected">
                     ${activeState.paths.map((path, index) => {
@@ -124,9 +131,9 @@ export default class StatePanel extends DocumentView
         const stepDetailView = activeState ? html`<div class="ff-scroll-y ff-flex-column sv-detail-view">
             <div class="sv-label">${languageManager.getUILocalizedString("Title")}</div>
             <ff-line-edit name="Title" text=${activeState.title} @change=${this.onTitleEdit}></ff-line-edit>
-            <sv-property-view .property=${machine.ins.curve}></sv-property-view>
-            <sv-property-view .property=${machine.ins.duration} commitonly></sv-property-view>
-            <sv-property-view .property=${machine.ins.threshold} commitonly></sv-property-view>
+            <sv-property-view .property=${machine.ins.curve} .languageManager=${languageManager}></sv-property-view>
+            <sv-property-view .property=${machine.ins.duration} .languageManager=${languageManager} commitonly></sv-property-view>
+            <sv-property-view .property=${machine.ins.threshold} .languageManager=${languageManager} commitonly></sv-property-view>
             <div class="sv-label">${languageManager.getUILocalizedString("Changes")}</div>
             ${tagDisplay}
         </div>` : html`<div class="ff-placeholder"><div>${languageManager.getUILocalizedString("Create or select a state change to edit.")}</div></div>`;

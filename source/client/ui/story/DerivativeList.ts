@@ -19,6 +19,7 @@ import { customElement, property, html } from "@ff/ui/CustomElement";
 import List from "@ff/ui/List";
 
 import Derivative, { EDerivativeUsage, EDerivativeQuality } from "../../models/Derivative";
+import CVLanguageManager from "../../components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -33,6 +34,9 @@ export interface ISelectDerivativeEvent extends CustomEvent
 @customElement("sv-derivative-list")
 class DerivativeList extends List<Derivative>
 {
+    @property({ attribute: false })
+    languageManager: CVLanguageManager = null;
+
     @property({ attribute: false })
     selectedItem: Derivative = null;
 
@@ -50,7 +54,7 @@ class DerivativeList extends List<Derivative>
         const isLoaded = item === this.loadedItem;
 
         return html`<ff-icon name=${isLoaded ? "check" : "empty"}></ff-icon>
-            <span>${EDerivativeUsage[item.data.usage]} - ${EDerivativeQuality[item.data.quality]}</span>`;
+            <span>${this.languageManager.getUILocalizedString(`${EDerivativeUsage[item.data.usage]} - ${EDerivativeQuality[item.data.quality]}`)}</span>`;
     }
 
     protected isItemSelected(item: Derivative)

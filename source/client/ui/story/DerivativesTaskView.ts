@@ -60,7 +60,7 @@ export default class DerivativesTaskView extends TaskView<CVDerivativesTask>
 
         return html`<div class="ff-flex-row ff-flex-wrap">
         </div>
-        <sv-derivative-list .data=${derivatives} .selectedItem=${activeDerivative} .loadedItem=${loadedDerivative} @select=${this.onSelectDerivative}></sv-derivative-list>
+        <sv-derivative-list .data=${derivatives} .selectedItem=${activeDerivative} .loadedItem=${loadedDerivative} @select=${this.onSelectDerivative} .languageManager=${languageManager}></sv-derivative-list>
         ${detailView}`
     }
 

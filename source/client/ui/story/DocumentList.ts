@@ -24,6 +24,7 @@ import { customElement, html, property, PropertyValues } from "@ff/ui/CustomElem
 
 import CVDocument from "../../components/CVDocument";
 import CVDocumentProvider, { IActiveDocumentEvent, IDocumentsEvent } from "../../components/CVDocumentProvider";
+import CVLanguageManager from "../../components/CVLanguageManager";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -32,6 +33,9 @@ class DocumentList extends List<CVDocument>
 {
     @property({ attribute: false })
     system: System = null;
+
+    @property({ attribute: false})
+    languageManager: CVLanguageManager = null;
 
     protected documentProvider: CVDocumentProvider = null;
     protected documents: CVDocument[] = [];
@@ -69,7 +73,7 @@ class DocumentList extends List<CVDocument>
     protected renderItem(component: CVDocument)
     {
         return html`<div class="ff-flex-row">
-            <ff-text class="ff-ellipsis">${component.displayName}</ff-text></div>`;
+            <ff-text class="ff-ellipsis">${this.languageManager.getUILocalizedString(component.displayName)}</ff-text></div>`;
     }
 
     protected isItemSelected(component: CVDocument)

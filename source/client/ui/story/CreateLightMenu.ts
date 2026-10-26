@@ -97,13 +97,13 @@ export default class CreateLightMenu extends Popup {
     }
 
     protected render() {
-        const language = this.language;
+        const languageManager = this.language;
 
         return html`
         <div role="region" aria-label="Create Light Menu" @keydown=${e => this.onKeyDownMain(e)}>
             <div class="ff-flex-column ff-fullsize">
                 <div class="ff-flex-row">
-                    <div class="ff-flex-spacer ff-title">${language.getUILocalizedString("Create Light")}</div>
+                    <div class="ff-flex-spacer ff-title">${languageManager.getUILocalizedString("Create Light")}</div>
                 </div>
                 <div class="ff-flex-row">
                     <div class="ff-dropdown">
@@ -111,22 +111,22 @@ export default class CreateLightMenu extends Popup {
                         ${Object.keys(ELightType)
                             .filter(key => typeof ELightType[key] === 'number')
                             .map((key) => {
-                                const light = language.system.getComponent("CV"+key.charAt(0).toUpperCase() + key.slice(1)+"Light", true);
+                                const light = languageManager.system.getComponent("CV"+key.charAt(0).toUpperCase() + key.slice(1)+"Light", true);
                                 const isDisabled = light && light.isGraphSingleton;
-                                return html`<option value=${ELightType[key]} ?disabled=${isDisabled}>${key}</option>`
+                                return html`<option value=${ELightType[key]} ?disabled=${isDisabled}>${languageManager.getUILocalizedString(`${key}`)}</option>`
                             })}
                     </select>
                     </div>
                 </div>
                 <div class="ff-flex-row">
-                    <label class="ff-label">${language.getUILocalizedString("Name")}</label>
+                    <label class="ff-label">${languageManager.getUILocalizedString("Name")}</label>
                     <div class="ff-flex-spacer"></div>
                     <input class="ff-input" type="text" .value=${this.name} @input=${(e: Event) => this.name = (e.target as HTMLInputElement).value} />
                 </div>
                 <div class="ff-flex-row">
-                    <ff-button icon="check" class="ff-button ff-control" text=${language.getUILocalizedString("Create")} title=${language.getUILocalizedString("Create Light")} @click=${this.confirm}></ff-button>
+                    <ff-button icon="check" class="ff-button ff-control" text=${languageManager.getUILocalizedString("Create")} title=${languageManager.getUILocalizedString("Create Light")} @click=${this.confirm}></ff-button>
                     <div class="ff-flex-spacer"></div>
-                    <ff-button icon="close" class="ff-close-button ff-control" text=${language.getUILocalizedString("Cancel")} title=${language.getUILocalizedString("Cancel")} @click=${this.close}></ff-button>
+                    <ff-button icon="close" class="ff-close-button ff-control" text=${languageManager.getUILocalizedString("Cancel")} title=${languageManager.getUILocalizedString("Cancel")} @click=${this.close}></ff-button>
                 </div>
             </div>
         </div>

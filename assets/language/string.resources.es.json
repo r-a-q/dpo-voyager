@@ -332,5 +332,13 @@
 	"Environment Map" : "Environment Map - spanish",
 	"Overlay Map" : "Overlay Map - spanish",
 	"Image Plane" : "Image Plane - spanish",
-	"Misc Asset" : "Misc Asset - spanish"
+	"Misc Asset" : "Misc Asset - spanish",
+	"Please select a light type and enter a name." : "Please select a light type and enter a name. - spanish",
+	"directional" : "directional - spanish",
+	"point" : "point - spanish",
+	"spot" : "spot - spanish",
+	"ambient" : "ambient - spanish",
+	"hemisphere" : "hemisphere - spanish",
+	"rect" : "rect - spanish",
+	"sun" : "sun - spanish"
 }

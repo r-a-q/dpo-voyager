@@ -58,7 +58,7 @@ export default class CaptureTaskView extends TaskView<CVCaptureTask>
         const ready = this.task.outs.ready.value;
 
         const imageElement = this.task.getImageElement();
-        const image = imageElement ? html`<div class="sv-label">Preview</div>
+        const image = imageElement ? html`<div class="sv-label">${languageManager.getUILocalizedString("Preview")}</div>
             <div class="sv-image">${imageElement}</div>` : null;
 
         return html`<div class="sv-label">${languageManager.getUILocalizedString("Scene State")}</div>
@@ -72,8 +72,8 @@ export default class CaptureTaskView extends TaskView<CVCaptureTask>
                 <ff-button text="${languageManager.getUILocalizedString("Download")}" icon="download" ?disabled=${!ready} @click=${this.onClickDownload}></ff-button>
             </div>
             <div class="ff-flex-item-stretch"><div class="ff-scroll-y ff-flex-column sv-detail-view">
-                <sv-property-view .property=${ins.type}></sv-property-view>
-                <sv-property-view .property=${ins.quality}></sv-property-view>
+                <sv-property-view .property=${ins.type} .languageManager=${languageManager}></sv-property-view>
+                <sv-property-view .property=${ins.quality} .languageManager=${languageManager}></sv-property-view>
                 ${image}
             </div></div>`;
     }

@@ -50,21 +50,21 @@ export default class CollectionPanel extends DocumentView
                 }
             })
         }
-
+        
         return html`<div class="ff-scroll-y ff-flex-column" style="padding-bottom: 5px">
             <div class="sv-panel-header">
                 <ff-icon name="document"></ff-icon>
-                <div class="ff-text">Collection</div>
+                <div class="ff-text">${languageManager.getUILocalizedString("Collection")}</div>
             </div>
-            <sv-property-view .property=${languageManager.ins.activeLanguage}></sv-property-view>
+            <sv-property-view .property=${languageManager.ins.activeLanguage} .languageManager=${languageManager}></sv-property-view>
             <div class="sv-indent">
-                <div class="sv-label">Title</div>
-                <ff-line-edit name="title" text=${this.activeDocument.ins.title.value || "Missing Title"} @change=${this.onTextEdit}></ff-line-edit>
-                <div class="sv-label">Intro</div>
+                <div class="sv-label">${languageManager.getUILocalizedString("Title")}</div>
+                <ff-line-edit name="title" text=${this.activeDocument.ins.title.value || `${languageManager.getUILocalizedString("Missing Title")}`} @change=${this.onTextEdit}></ff-line-edit>
+                <div class="sv-label">${languageManager.getUILocalizedString("Intro")}</div>
                 <ff-text-edit name="intro" text=${this.activeDocument.ins.intro.value} @change=${this.onTextEdit}></ff-text-edit>
             </div>
-            <div class="sv-label">Copyright</div>
-            <ff-line-edit name="copyright" text=${this.activeDocument.ins.copyright.value} @change=${this.onTextEdit}></ff-line-edit>
+            <div class="sv-label">${languageManager.getUILocalizedString("Copyright")}</div>
+            <ff-line-edit name="copyright" text=${languageManager.getUILocalizedString(`${this.activeDocument.ins.copyright.value}`)} @change=${this.onTextEdit}></ff-line-edit>
             ${customMetas}
         </div>`;
     }

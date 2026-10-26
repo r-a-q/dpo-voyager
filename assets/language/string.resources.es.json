@@ -89,7 +89,7 @@
 	"audio file are not supported by some browsers": "algunos navegadores no admiten este archivo de audio",
 	"audio slider": "deslizador de audio",
 	"Audio": "Audio",
-	"c) Smithsonian Institution. All rights reserved.": "c) Smithsonian Institution. Todos los derechos reservados.",
+	"(c) Smithsonian Institution. All rights reserved.": "(c) Smithsonian Institution. Todos los derechos reservados.",
 	"Camera": "Cámara",
 	"Cancel": "Cancelar",
 	"CaptionPath": "Ruta del subtítulo",
@@ -263,16 +263,6 @@
 	"Yes": "Sí",
 	"Zoom Extents": "Extensión de zoom",
 	"Read more": "Leer más",
-	"column.header.Numbering": "#",
-	"panel.header.navigator": "Navegador",
-	"panel.header.assets": "Medios",
-	"panel.header.collection": "Colección",
-	"panel.header.task": "Tarea",
-	"panel.header.explorer": "Explorador",
-	"panel.header.article-editor": "Editor de artículos",
-	"panel.header.tour-editor": "Editor de recorridos",
-	"panel.header.state-editor": "Editor de estados",
-	"panel.header.notes": "Editor de notas",
 	"Active:": "Activo:",
 	"Arrow keys": "Teclas de dirección",
 	"Changes": "Cambios",
@@ -341,5 +331,6 @@
 	"hemisphere" : "hemisphere - spanish",
 	"rect" : "rect - spanish",
 	"sun" : "sun - spanish",
-	"Delete light" : "Delete light - spanish"
+	"Delete light" : "Delete light - spanish",
+	"Missing Title" : "Missing Title - spanish"
 }

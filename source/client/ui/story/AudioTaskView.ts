@@ -71,17 +71,17 @@ export default class AudioTaskView extends TaskView<CVAudioTask>
         const narrationEnabled = !ins.isNarration.value && audioList.some(clip => clip.id === this.task.audioManager.narrationId);
 
         const detailView = audioElement ? html`<div class="ff-scroll-y ff-flex-column sv-detail-view">
-            <sv-property-view .property=${ins.title}></sv-property-view>
-            <sv-property-view .property=${languageManager.ins.activeLanguage}></sv-property-view>
+            <sv-property-view .property=${ins.title} .languageManager=${languageManager}></sv-property-view>
+            <sv-property-view .property=${languageManager.ins.activeLanguage} .languageManager=${languageManager}></sv-property-view>
             <div class="sv-indent">
-                <sv-property-view id="filename" .property=${ins.filepath} @drop=${this.onDropFile} @dragenter=${this.onDragEnter} @dragover=${this.onDragOver} @dragleave=${this.onDragLeave}></sv-property-view>
-                <sv-property-view id="captionfile" .property=${ins.captionPath} @drop=${this.onDropFile} @dragenter=${this.onDragEnter} @dragover=${this.onDragOver} @dragleave=${this.onDragLeave}></sv-property-view>
+                <sv-property-view id="filename" .property=${ins.filepath} .languageManager=${languageManager} @drop=${this.onDropFile} @dragenter=${this.onDragEnter} @dragover=${this.onDragOver} @dragleave=${this.onDragLeave}></sv-property-view>
+                <sv-property-view id="captionfile" .property=${ins.captionPath} .languageManager=${languageManager} @drop=${this.onDropFile} @dragenter=${this.onDragEnter} @dragover=${this.onDragOver} @dragleave=${this.onDragLeave}></sv-property-view>
                 <div class="sv-commands">
-                    <sv-property-boolean .property=${ins.isNarration} .text=${this.optionText} .customLabelStyle=${narrationFlagClass} ?disabled=${narrationEnabled}></sv-property-boolean>
+                    <sv-property-boolean .property=${ins.isNarration} name=${languageManager.getUILocalizedString("IsNarration")} .text=${this.optionText.map(text => languageManager.getUILocalizedString(text))} .customLabelStyle=${narrationFlagClass} ?disabled=${narrationEnabled}></sv-property-boolean>
                 </div>
                 <div class="sv-commands">
-                    <ff-button text="Play" @click=${this.onClickPlay}></ff-button>
-                    <ff-button text="Stop" ?disabled=${!this.task.audioManager.outs.isPlaying.value} @click=${this.onClickStop}></ff-button>
+                    <ff-button text=${languageManager.getUILocalizedString("Play")} @click=${this.onClickPlay}></ff-button>
+                    <ff-button text=${languageManager.getUILocalizedString("Stop")} ?disabled=${!this.task.audioManager.outs.isPlaying.value} @click=${this.onClickStop}></ff-button>
                 </div>
             </div>
         </div>` : null;
@@ -95,7 +95,7 @@ export default class AudioTaskView extends TaskView<CVAudioTask>
                 <div class="ff-flex-row ff-group"><div class="sv-panel-header sv-task-item sv-task-item-full">${languageManager.getUILocalizedString("Audio Elements")}</div></div>
                 <div class="ff-splitter-section" style="flex-basis: 30%">
                     <div class="ff-scroll-y ff-flex-column">
-                        <sv-audio-list .data=${audioList} .selectedItem=${audioElement} @select=${this.onSelectAudio}></sv-annotation-list>
+                        <sv-audio-list .data=${audioList} .selectedItem=${audioElement} .languageManager=${languageManager} @select=${this.onSelectAudio}></sv-audio-list>
                     </div>
                 </div>
                 <ff-splitter direction="vertical"></ff-splitter>
@@ -159,21 +159,22 @@ export default class AudioTaskView extends TaskView<CVAudioTask>
         const id = element.parentElement.parentElement.id;
         const type = (id == "filename")? "audio": "subs";
         const fileProp = (type == "audio") ? this.task.ins.filepath : this.task.ins.captionPath;
+        const languageManager = this.activeDocument.setup.language;
 
         const ext = filename.toLowerCase().split(".").pop();
         if(type === "subs" && ext != "vtt"){
-            Notification.show(`Unable to load - Only .vtt files are currently supported.`, "warning");
+            Notification.show(`${languageManager.getUILocalizedString(`Unable to load - Only .vtt files are currently supported.`)}`, "warning");
         }else if(type === "audio" && ["mp3","m4a","flac","ogg","wav"].indexOf(ext) === -1){
-            Notification.show(`Unable to load - Unsupported audio format .${ext}`, "warning");
+            Notification.show(`${languageManager.getUILocalizedString(`Unable to load - Unsupported audio format`)} .${ext}`, "warning");
         }else{
             if(type === "audio" && ext === "m4a"){
                 // Only m4a does not have 100% browser support
-                Notification.show(`.${ext} audio file are not supported by some browsers`, "info", 3000);
+                Notification.show(`.${ext} ${languageManager.getUILocalizedString(`audio file are not supported by some browsers`)}`, "info", 3000);
             }
             if(newFile !== null) {
                 const mediaManager = this.system.getMainComponent(CVMediaManager);
                 mediaManager.uploadFile(filename, newFile, mediaManager.root).then(() => fileProp.setValue(filename)).catch(e => {
-                    Notification.show(`Audio file upload failed.`, "warning");
+                    Notification.show(`${languageManager.getUILocalizedString(`Audio file upload failed.`)}`, "warning");
                     fileProp.setValue("");
                 });
             }
@@ -233,6 +234,9 @@ export class AudioList extends List<IAudioClip>
     @property({ attribute: false })
     selectedItem: IAudioClip = null;
 
+    @property({ attribute: false })
+    languageManager: any = null;
+
     protected firstConnected()
     {
         super.firstConnected();
@@ -241,7 +245,7 @@ export class AudioList extends List<IAudioClip>
 
     protected renderItem(item: IAudioClip)
     {
-        return html`<div class="ff-flex-row ff-group"><div class="sv-task-item">${item.name}</div></div>`;
+        return html`<div class="ff-flex-row ff-group"><div class="sv-task-item">${this.languageManager.getUILocalizedString(`${item.name}`)}</div></div>`;
     }
 
     protected isItemSelected(item: IAudioClip)

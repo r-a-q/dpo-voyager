@@ -333,5 +333,8 @@
 	"sun" : "sun - spanish",
 	"Delete light" : "Delete light - spanish",
 	"Missing Title" : "Missing Title - spanish",
-	"Preview" : "Preview - spanish"
+	"Preview" : "Preview - spanish",
+	"Audio file upload failed." : "Error al subir el archivo de audio.",
+	"Unable to load - Only .vtt files are currently supported." : "No se puede cargar: solo se admiten archivos .vtt.",
+	"Unable to load - Unsupported audio format" : "No se puede cargar: formato de audio no compatible."
 }

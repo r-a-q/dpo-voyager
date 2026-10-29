@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Accessibility Menu  DEV</title>
+
+        <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+        <link href="/fonts/fonts.css" rel="stylesheet">
+
+        <style>
+
+        </style>
+
+        <!-- Use em or rem for scalable web designs - allows users to change text size in their browser settings -->
+        <script >
+            function textSizeCustomization(selectedFontSize) {
+                // const testValue = document.getElementById("change-font-size");
+                // console.log(testValue);
+                const fontSize = document.querySelector('input[name="font-size"]:checked').value;
+                //console.log(fontSize);
+
+                //alert("function triggered when changed value: " + fontSize);
+                
+                //returns an array, not a singular element
+                const text = document.getElementsByClassName("practice-text");
+                //console.log(text);
+
+                //.style.fontSize = fontSize;
+
+                for (var i = 0; i < text.length; i++) {
+                    //console.log("Reached inside the loop!");
+                    //console.log(text[i]);
+                    text[i].style.fontSize = fontSize;
+                }
+            }
+        </script>
+
+        <link href="dpo-voyager/files/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <section aria-label="button groups for text customization">
+            <button class="customization-button">
+                <span class="customization-title">Bigger Text</span>
+                <span class="customization-icon-bigger-text"></span>
+            </button>
+        </section>
+
+        <!-- Would the ideal way to increase/decrease the font size be through percentage (or something similar)? -->
+         <!-- Combining methods & examples from w3schools -->
+        <form id="change-font-size" aria-label="Select value to make font bigger or smaller">
+            <p>Text Customization</p>
+
+            <!-- change value of text size to be percentages? -->
+            <input type="radio" id="text-size-medium" class="text-size" value="medium" name="font-size" onclick="textSizeCustomization(this.value)">
+            <label for="text-size-medium">Default</label>
+            <input type="radio" id="text-size-large" class="text-size" value="large" name="font-size" onclick="textSizeCustomization(this.value)">
+            <label for="text-size-large">Large</label>
+            <input type="radio" id="text-size-x-large" class="text-size" value="x-large" name="font-size" onclick="textSizeCustomization(this.value)">
+            <label for="text-size-x-large">X-Large</label>
+            <input type="radio" id="text-size-xx-large" class="text-size" value="xx-large" name="font-size" onclick="textSizeCustomization(this.value)">
+            <label for="text-size-xx-large">XX-Large</label>
+        </form>
+        
+        <section aria-label="practice text">
+            <p class="practice-text">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, 
+                there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, 
+                a large language ocean. A small river named Duden flows by their place and supplies it with the 
+                necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly 
+                into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost 
+                unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided 
+                to leave for the far World of Grammar. The Big Oxmox advised her not to do so, because there were 
+                thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn't 
+                listen. She packed her seven versalia, put her initial into the belt and made herself on the way. 
+                When she reached the first hills of the Italic Mountains, she had a last view back on the skyline 
+                of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, 
+                the Line Lane. Pityful a rethoric question ran over her cheek.</p>
+
+                <p class="practice-text">The getElementsByClassName method of Document interface returns an array-like object of all child elements which have all of the given class name(s).
+                    When called on the document object, the complete document is searched, including the root node. 
+                    You may also call getElementsByClassName() on any element; it will return only elements which 
+                    are descendants of the specified root element with the given class name(s).</p>
+        </section>
+    </body>
+</html>

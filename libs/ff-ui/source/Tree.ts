@@ -225,11 +225,20 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         //     html`<div class="ff-header" @click=${this.onClick} @dblclick=${this.onDblClick}>${header}</div>`;
 
 
+        /**Raq Notes:
+         * Camera & Lights that are created are rendering as HEADERS
+         * Lights & Models do functionality when clicked by a mouse but not when tabbed into by a keyboard
+         * 
+         * ff-button text="" icon=""
+         * ${header}
+         */
         return html`
             <div class="ff-tree-node-container">
                 <div class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded}>
-                    <div class="ff-header" draggable="true"
-                        @click=${this.onClick} @dblclick=${this.onDblClick}>${header}</div>
+                    <h4 class="ff-header">
+                        <ff-button text="${header}" draggable="true"
+                            @click=${this.onClick} @dblclick=${this.onDblClick} aria-expanded="true"></ff-button>
+                    </h4>
                     <div class="ff-content">${content}</div>
                 </div>
             </div>

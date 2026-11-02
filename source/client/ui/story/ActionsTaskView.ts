@@ -65,7 +65,7 @@ export default class ActionsTaskView extends TaskView<CVActionsTask>
 
         const accessibilityNotice = ins.type.value === EActionType.PlayAudio && 
             (ins.trigger.value === EActionTrigger.OnTourStep || ins.trigger.value === EActionTrigger.OnLoad) ?
-            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("Trigger/Action combination not supported for accessibility.")}</div>` : null;
+            html`<div class="sv-placeholder" style="color: red">${languageManager.getUILocalizedString("Trigger/Action combination not supported for accessibility")}.</div>` : null;
 
         const stateChangeWarning = ins.type.value === EActionType.StateChange && 
             ins.trigger.value === EActionTrigger.OnTourStep ?

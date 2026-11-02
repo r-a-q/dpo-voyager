@@ -75,17 +75,17 @@ export default class LanguageMenu extends Popup
 
     protected render()
     {
-        const language = this.language;
+        const languageManager = this.language;
 
         return html`
-        <div role="region" aria-label="Language Menu" @keydown=${e =>this.onKeyDownMain(e)}>
+        <div role="region" aria-label=${languageManager.getLocalizedString("Language Menu")} @keydown=${e =>this.onKeyDownMain(e)}>
             <div class="ff-flex-row">
-                <div class="ff-flex-spacer ff-title">${language.getLocalizedString("Set Language")}</div>
-                <ff-button icon="close" transparent class="ff-close-button" title=${language.getLocalizedString("Close")} @click=${this.close}></ff-button>
+                <div class="ff-flex-spacer ff-title">${languageManager.getLocalizedString("Set Language")}</div>
+                <ff-button icon="close" transparent class="ff-close-button" title=${languageManager.getLocalizedString("Close")} @click=${this.close}></ff-button>
             </div>
             <div class="ff-flex-row">
                 <div class="ff-scroll-y sv-scroll-offset" role="listbox">
-                    ${language.sceneLanguages.map((language, index) => this.renderEntry(language, index))}
+                    ${languageManager.sceneLanguages.map((language, index) => this.renderEntry(language, index))}
                 </div>
             </div>
         </div>
@@ -100,21 +100,21 @@ export default class LanguageMenu extends Popup
 
     protected onClickLanguage(e: MouseEvent, index: number)
     {
-        const language = this.language;
+        const languageManager = this.language;
 
         e.stopPropagation();
 
-        language.ins.activeLanguage.setValue(language.sceneLanguages[index].id);  
+        languageManager.ins.activeLanguage.setValue(languageManager.sceneLanguages[index].id);  
         this.close();  
     }
 
     protected onKeyDownEntry(e: KeyboardEvent, index: number)
     {
-        const language = this.language;
+        const languageManager = this.language;
         if (e.code === "Space" || e.code === "Enter") {
             e.preventDefault();
             e.stopPropagation();
-            language.ins.activeLanguage.setValue(language.sceneLanguages[index].id);
+            languageManager.ins.activeLanguage.setValue(languageManager.sceneLanguages[index].id);
             this.close();
         }
         else if(e.code === "ArrowUp" || e.code === "ArrowDown") {

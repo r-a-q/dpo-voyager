@@ -23,12 +23,16 @@ import CVViewer from "../../components/CVViewer";
 import DocumentView, { customElement, html } from "./DocumentView";
 import {getFocusableElements, focusTrap} from "../../utils/focusHelpers";
 
+import CVLanguageManager from "client/components/CVLanguageManager";
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @customElement("sv-tag-cloud")
 export default class TagCloud extends DocumentView
 {
     protected viewer: CVViewer;
+
+    protected language: CVLanguageManager = null;
 
     protected get activeTags() {
         return this.viewer ? this.viewer.ins.activeTags.value.split(",")
@@ -53,13 +57,15 @@ export default class TagCloud extends DocumentView
         const activeTags = this.activeTags;
         const tagCloud = this.tagCloud;
 
+        const languageManager = this.language;
+
         const tagButtons = tagCloud.map(tag =>
             html`<ff-button class="sv-tag-button" transparent text=${tag}
                 ?selected=${activeTags.indexOf(tag) >= 0}
                 @click=${e => this.onSelectTag(tag)}></ff-button>`);
 
-        return html`<div class="sv-blue-bar" @keydown=${this.onKeyDown} role="region" aria-label="Tag Cloud Menu"><div class="sv-section">
-                <ff-button class="sv-section-lead" transparent icon="close" title="Close Tag Menu" @click=${this.onClickClose}></ff-button>
+        return html`<div class="sv-blue-bar" @keydown=${this.onKeyDown} role="region" aria-label=${languageManager.getLocalizedString("Tag Cloud Menu")}><div class="sv-section">
+                <ff-button class="sv-section-lead" transparent icon="close" title=${languageManager.getLocalizedString("Close Tag Menu")} @click=${this.onClickClose}></ff-button>
                 <div class="sv-tag-buttons">${tagButtons}</div>
         </div></div>`;
     }

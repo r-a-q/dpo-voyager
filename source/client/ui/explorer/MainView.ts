@@ -18,6 +18,7 @@
 import CFullscreen from "@ff/scene/components/CFullscreen";
 import CVARManager from "client/components/CVARManager";
 import CVViewer from "client/components/CVViewer";
+import CVLanguageManager from "client/components/CVLanguageManager";
 
 import CustomElement, { customElement, html } from "@ff/ui/CustomElement";
 
@@ -101,6 +102,10 @@ export default class MainView extends CustomElement
     }
     protected get viewer() {
         return this.application.system.getComponent(CVViewer);
+    }
+
+    protected get languageManager() {
+        return this.application.system.getComponent(CVLanguageManager);
     }
 
     protected firstConnected()
@@ -199,9 +204,9 @@ export default class MainView extends CustomElement
     protected onFocus()
     {
         this.shadowRoot.getElementById("sr-intro").innerText =
-            "The Voyager web application allows you to view "
-            + "and interact with a 3D model from the Smithsonian collection. Use the tab key to "
-            + "move through interactive elements, enter or spacebar keys to activate, and the escape key to exit menus.";
+            `${this.languageManager.getUILocalizedString("The Voyager web application allows you to view ")}`
+            + `${this.languageManager.getUILocalizedString("and interact with a 3D model from the Smithsonian collection. Use the tab key to ")}`
+            + `${this.languageManager.getUILocalizedString("move through interactive elements, enter or spacebar keys to activate, and the escape key to exit menus.")}`;
     }
 
 

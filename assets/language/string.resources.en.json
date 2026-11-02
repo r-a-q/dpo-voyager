@@ -327,6 +327,5 @@
 	"property.label.Threshold": "Threshold",
 	"property.label.Title": "Title",
 
-	"statePanel.selectStatePrompt": "Create or select a state change to edit",
-	"Logo": "Logo"
+	"statePanel.selectStatePrompt": "Create or select a state change to edit"
 	}

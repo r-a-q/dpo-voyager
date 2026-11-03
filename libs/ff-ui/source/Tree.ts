@@ -207,7 +207,6 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         this._idByNode.set(treeNode, id);
 
         const children = this.getChildren(treeNode);
-
         const selected = this.isNodeSelected(treeNode);
         const expanded = this.isNodeExpanded(treeNode);
 
@@ -216,6 +215,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         let classes = "ff-tree-node " + typeClass + levelClass + this.getClasses(treeNode);
 
         const header = this.renderNodeHeader(treeNode);
+        // const headerName = this.getName(treeNode);
         const content = this.renderNodeContent(treeNode, children, level + 1);
 
         // const headerHTML = this.draggable ?
@@ -225,13 +225,35 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         //     html`<div class="ff-header" @click=${this.onClick} @dblclick=${this.onDblClick}>${header}</div>`;
 
 
-        return html`
-            <div class="ff-tree-node-container">
+        /**Raq Notes:
+         * Camera & Lights that are created are rendering as HEADERS
+         * Lights & Models do functionality when clicked by a mouse but not when tabbed into by a keyboard
+         * 
+         * ff-button text="" icon=""
+         * ${header}
+         * @keydown.enter=${this.onEnter} - create a function?
+         * 
+         * Semantics recommended for an Accordion Pattern:
+         * <div class="ff-tree-node-container">
                 <div class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded}>
-                    <div class="ff-header" draggable="true"
-                        @click=${this.onClick} @dblclick=${this.onDblClick}>${header}</div>
+                    <h4>
+                        <button class="ff-header" draggable="true"
+                            @click=${this.onClick} @dblclick=${this.onDblClick}  aria-expanded="true">${headerName}</button>
+                    </h4>
                     <div class="ff-content">${content}</div>
                 </div>
+            </div>
+
+            GENERATE A CLICK FROM A KEYDOWN EVENT (COPY THE CODE FROM FF-BUTTON TO SIMULATE A CLICK. IF CLICK IS SIMULATED, CALL THE ONCLICK FUNCTION)
+            @keydown=${this.onKeyDown}
+         */
+        return html`
+            <div class="ff-tree-node-container">
+                <ul role="tree" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded}>
+                    <li role="treeitem" class="ff-header" draggable="true"
+                            @click=${this.onClick} @dblclick=${this.onDblClick}>${header}</li>
+                    <li role="treeitem" class="ff-content">${content}</li>
+                </ul>
             </div>
         `;
     }

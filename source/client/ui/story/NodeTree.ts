@@ -173,19 +173,6 @@ class NodeTree extends Tree<NVNode>
 
     }
 
-    // protected onNodeKeyPress(event: KeyboardEvent, node: NVNode)
-    // {
-    //     const rect = event.currentTarget as HTMLElement;
-
-    //     if (rect.classList.contains("ff-header")) {
-    //     {
-    //         this.toggleExpanded(node);
-    //     }
-    //     else {
-    //         this.nodeProvider.activeNode = node;
-    //     }
-    // }
-
     protected onNodeClick(event: MouseEvent, node: NVNode)
     {
         const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
@@ -196,6 +183,11 @@ class NodeTree extends Tree<NVNode>
         else {
             this.nodeProvider.activeNode = node;
         }
+    }
+
+    protected onNodeKeyDown(node: NVNode) 
+    {
+        this.nodeProvider.activeNode = node;
     }
 
     protected onContainerClick()

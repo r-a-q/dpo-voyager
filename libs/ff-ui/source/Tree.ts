@@ -51,6 +51,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         this.setSelected(treeNode, undefined);
     }
 
+    //Raq - CHANGED attribute to "aria-selected"
     setSelected(treeNode: T, state: boolean)
     {
         const id = this._idByNode.get(treeNode);
@@ -64,7 +65,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
                 nodeElement.setAttribute("selected", "");
             }
             else {
-                nodeElement.removeAttribute("selected");
+                nodeElement?.removeAttribute("selected");
             }
         }
     }
@@ -85,6 +86,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         this.setExpanded(treeNode, undefined);
     }
 
+    //RAQ - CHANGED setAttribute to aria-expanded
     setExpanded(treeNode: T, state: boolean)
     {
         const id = this._idByNode.get(treeNode);
@@ -108,7 +110,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         const id = this._idByNode.get(treeNode);
         if (id) {
             const nodeElement = document.getElementById(id);
-            return nodeElement.hasAttribute("expanded");
+            return nodeElement?.hasAttribute("expanded");
         }
 
         return false;
@@ -117,6 +119,8 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     protected firstConnected()
     {
         this.classList.add("ff-tree");
+        this.setAttribute("role", "tree");
+        this.setAttribute("tabindex", "-1");
 
         if (this.draggable) {
             this.addEventListener("dragstart", this.onDragStart.bind(this));
@@ -207,12 +211,16 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         this._idByNode.set(treeNode, id);
 
         const children = this.getChildren(treeNode);
+        
         const selected = this.isNodeSelected(treeNode);
         const expanded = this.isNodeExpanded(treeNode);
 
         const typeClass = children && children.length > 0 ? "ff-inner " : "ff-leaf ";
         const levelClass = level % 2 === 0 ? "ff-even " : "ff-odd ";
+        const levelStep = "level-" + level.toString() + " "; //testing the level of the node
         let classes = "ff-tree-node " + typeClass + levelClass + this.getClasses(treeNode);
+
+        const headerClasses = "ff-header " + levelStep;
 
         const header = this.renderNodeHeader(treeNode);
         // const headerName = this.getName(treeNode);
@@ -244,19 +252,102 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
                 </div>
             </div>
 
+            original one
+             <div class="ff-tree-node-container">
+                <li role="treeitem" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded} tabindex="0"> 
+                    <div class="ff-header" draggable="true"
+                            @click=${this.onClick} @dblclick=${this.onDblClick}>${header}</div>
+                    <div class="ff-content">${content}</div>
+                </li>
+            </div>
+
             GENERATE A CLICK FROM A KEYDOWN EVENT (COPY THE CODE FROM FF-BUTTON TO SIMULATE A CLICK. IF CLICK IS SIMULATED, CALL THE ONCLICK FUNCTION)
             @keydown=${this.onKeyDown}
          */
         return html`
             <div class="ff-tree-node-container">
-                <ul role="tree" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded}>
-                    <li role="treeitem" class="ff-header" draggable="true"
-                            @click=${this.onClick} @dblclick=${this.onDblClick}>${header}</li>
-                    <li role="treeitem" class="ff-content">${content}</li>
-                </ul>
+                <div role="treeitem" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded}>
+                    <div class=${headerClasses} draggable="true"
+                        @click=${this.onClick} @dblclick=${this.onDblClick} @keydown=${this.onKeyDown} tabindex="0">${header}</div>
+                    <div class="ff-content" role="group">${content}</div>
+                </div>
             </div>
         `;
     }
+
+    protected onKeyDown(event: KeyboardEvent)
+    {   
+        console.log("made it into the function onKeyDown! Key Pressed: " + event.code.toString());
+        //event codes based on the keyboard event code values
+        if (event.code === "Space" || event.code === "Enter") {
+
+            console.log("made it inside of Enter/Space if statement!");
+            
+            event.preventDefault();
+            this.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            console.log("inside of Enter/Space key, AFTER dispatching a mouse event");
+
+        const treeNode = this.getNodeFromEventTarget(event);
+
+        this.onNodeKeyDown(treeNode);
+
+        // if (treeNode) {
+        //     this.onNodeClick(event, treeNode);
+        // }
+
+        // event.stopPropagation();
+        
+        }
+    //     if (event.code === "ArrowUp") {
+
+    //     }
+    //     if (event.code === "ArrowDown") {
+
+    //     }
+    //     if (event.code === "ArrowLeft") {
+
+    //     }
+        // if (event.code === "ArrowRight") {
+        //     console.log("reached here once ArrowRight was pressed!");
+        //     event.preventDefault();
+
+        //     const treeNode = this.getNodeFromEventTarget(event);
+
+        //     if (this.isExpandable(treeNode))
+        //     {
+        //         this.onNodeKeyDown(event, treeNode);
+        //     }
+
+
+        // }
+        if (event.code === "Home") {
+            //shift focus to the node that has role="tree"
+            console.log("reached here once home button was pressed!");
+            event.preventDefault(); //prevents home button from performing its default function
+
+            const treeNodeByClass = document.getElementsByClassName("level-0")[0] as HTMLElement; //for TESTING to make sure it works
+            const treeNode = document.querySelector('[role="tree"]') as HTMLElement; //go to the first element with the role="tree" - should be the current active one? 
+            //does this work if the navigation panel is open and we are in the task menu? (test it!)
+            //it DOES select the tree in the navigation panel - find a way to select the CURRENT tree            
+
+            console.log(treeNodeByClass);
+
+            treeNodeByClass.focus();
+        }
+        // if (event.code === "End") {
+        //     //shift focus to the node that has role="tree"
+        // } 
+    }
+
+    // protected visible ()
+    // {
+
+    // }
+    
+    // protected isExpandable(treeNode: T)
+    // {
+    //     return treeNode.hasAttribute("aria-expanded");
+    // }
 
     protected onDragStart(event: DragEvent)
     {
@@ -379,6 +470,11 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
 
     protected onNodeDblClick(event: MouseEvent, treeNode: T)
     {
+    }
+
+    protected onNodeKeyDown(treeNode: T) 
+    {
+        //this.toggleExpanded(treeNode);
     }
 
     protected getNodeFromEventTarget(event: Event): T | null

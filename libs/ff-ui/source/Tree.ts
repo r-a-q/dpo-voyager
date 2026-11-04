@@ -63,9 +63,11 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
 
             if (state) {
                 nodeElement.setAttribute("selected", "");
+                nodeElement.setAttribute("aria-selected", "true");
             }
             else {
-                nodeElement?.removeAttribute("selected");
+                nodeElement.removeAttribute("selected");
+                nodeElement.setAttribute("aria-selected", "false");
             }
         }
     }
@@ -98,9 +100,11 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
 
             if (state) {
                 nodeElement.setAttribute("expanded", "");
+                nodeElement.setAttribute("aria-expanded", "true");
             }
             else {
                 nodeElement.removeAttribute("expanded");
+                nodeElement.setAttribute("aria-expanded", "false");
             }
         }
     }
@@ -266,7 +270,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
          */
         return html`
             <div class="ff-tree-node-container">
-                <div role="treeitem" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded}>
+                <div role="treeitem" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded} aria-expanded="true" aria-selected="false">
                     <div class=${headerClasses} draggable="true"
                         @click=${this.onClick} @dblclick=${this.onDblClick} @keydown=${this.onKeyDown} tabindex="0">${header}</div>
                     <div class="ff-content" role="group">${content}</div>
@@ -278,18 +282,17 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     protected onKeyDown(event: KeyboardEvent)
     {   
         console.log("made it into the function onKeyDown! Key Pressed: " + event.code.toString());
+
+        const treeNode = this.getNodeFromEventTarget(event);
         //event codes based on the keyboard event code values
         if (event.code === "Space" || event.code === "Enter") {
 
             console.log("made it inside of Enter/Space if statement!");
             
-            event.preventDefault();
-            this.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            event.preventDefault();        
             console.log("inside of Enter/Space key, AFTER dispatching a mouse event");
 
-        const treeNode = this.getNodeFromEventTarget(event);
-
-        this.onNodeKeyDown(treeNode);
+        this.onNodeKeyDown(event, treeNode);
 
         // if (treeNode) {
         //     this.onNodeClick(event, treeNode);
@@ -326,7 +329,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             event.preventDefault(); //prevents home button from performing its default function
 
             const treeNodeByClass = document.getElementsByClassName("level-0")[0] as HTMLElement; //for TESTING to make sure it works
-            const treeNode = document.querySelector('[role="tree"]') as HTMLElement; //go to the first element with the role="tree" - should be the current active one? 
+            const treeNodeByRole = document.querySelector('[role="tree"]') as HTMLElement; //go to the first element with the role="tree" - should be the current active one? 
             //does this work if the navigation panel is open and we are in the task menu? (test it!)
             //it DOES select the tree in the navigation panel - find a way to select the CURRENT tree            
 
@@ -472,7 +475,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     {
     }
 
-    protected onNodeKeyDown(treeNode: T) 
+    protected onNodeKeyDown(even: KeyboardEvent, treeNode: T) 
     {
         //this.toggleExpanded(treeNode);
     }

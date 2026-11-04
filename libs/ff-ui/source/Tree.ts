@@ -310,7 +310,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
 
             if (this.isExpanded(treeNode))
             {
-                //if the node is already expanded - go to the first node
+                //if the node is alreadylibs/ff-ui/source/Tree.ts expanded - go to the first node
             }
             else
             {

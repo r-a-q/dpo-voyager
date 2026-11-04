@@ -293,12 +293,6 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             console.log("inside of Enter/Space key, AFTER dispatching a mouse event");
 
         this.onNodeKeyDown(event, treeNode);
-
-        // if (treeNode) {
-        //     this.onNodeClick(event, treeNode);
-        // }
-
-        // event.stopPropagation();
         
         }
     //     if (event.code === "ArrowUp") {
@@ -310,19 +304,22 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     //     if (event.code === "ArrowLeft") {
 
     //     }
-        // if (event.code === "ArrowRight") {
-        //     console.log("reached here once ArrowRight was pressed!");
-        //     event.preventDefault();
+        if (event.code === "ArrowRight") {
+            console.log("reached here once ArrowRight was pressed!");
+            event.preventDefault();
 
-        //     const treeNode = this.getNodeFromEventTarget(event);
+            if (this.isExpanded(treeNode))
+            {
+                //if the node is already expanded - go to the first node
+            }
+            else
+            {
+                //expand the node
+                this.toggleExpanded(treeNode);
+            }
 
-        //     if (this.isExpandable(treeNode))
-        //     {
-        //         this.onNodeKeyDown(event, treeNode);
-        //     }
 
-
-        // }
+        }
         if (event.code === "Home") {
             //shift focus to the node that has role="tree"
             console.log("reached here once home button was pressed!");

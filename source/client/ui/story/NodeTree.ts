@@ -185,7 +185,7 @@ class NodeTree extends Tree<NVNode>
         }
     }
 
-    protected onNodeKeyDown(node: NVNode) 
+    protected onNodeKeyDown(event: KeyboardEvent, node: NVNode) 
     {
         this.nodeProvider.activeNode = node;
     }

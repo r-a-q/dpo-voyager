@@ -301,35 +301,26 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     //     if (event.code === "ArrowDown") {
 
     //     }
-        if (event.code === "ArrowLeft") {
-
-
+        if (event.code === "ArrowLeft") 
+        {
             event.preventDefault();
 
+            const treeNodeDiv = this.getElementByNode(treeNode) as HTMLElement;
 
-            if (this.isExpanded(treeNode))
+            if (treeNodeDiv.classList.contains("ff-leaf"))
+            {
+                const parentTreeNodeDiv = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;
+                parentTreeNodeDiv.focus();
+            }
+            else if (this.isExpanded(treeNode))
             {
                 this.toggleExpanded(treeNode);
             }
-
-            const treeNodeDiv = this.getElementByNode(treeNode) as HTMLElement;
-            console.log("getElementByNode:");
-            console.log(treeNodeDiv);
-
-            const parentOfTreeNode = treeNodeDiv.parentElement;
-            console.log("parentOfTreeNode:");
-            console.log(parentOfTreeNode);
-            //console.log(treeNode.getClasses());
-            //console.log("Name: " + treeNode.parent.displayName);
-            //console.log("Name try 2: " + treeNodeDiv.parentElement)
-
-            //go to the parent node of the currently open node
-            //let currClasses = treeNode.classList;
-
-            //console.log("classes: " + currClasses);
-            //const firstTreeNode = this.querySelector('[aria-expanded="true"]') as HTMLElement;
-            // console.log(firstTreeNode);
-            //firstTreeNode.focus();
+            else if (treeNodeDiv.classList.contains("ff-inner") && !treeNodeDiv.classList.contains("level-0"))
+            {
+                const parentTreeNodeDiv = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;
+                parentTreeNodeDiv.focus();
+            }
 
         }
         if (event.code === "ArrowRight") {

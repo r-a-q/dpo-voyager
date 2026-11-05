@@ -25,6 +25,8 @@ export interface ITreeNode extends Dictionary<any>
 @customElement("ff-tree")
 export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
 {
+    //custom is an extension of the HTML element
+    //if you use this.
     static readonly dragDropMimeType: string = "application/x-ff-tree-node";
 
     @property({ attribute: false })
@@ -51,7 +53,6 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         this.setSelected(treeNode, undefined);
     }
 
-    //Raq - CHANGED attribute to "aria-selected"
     setSelected(treeNode: T, state: boolean)
     {
         const id = this._idByNode.get(treeNode);
@@ -88,7 +89,6 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         this.setExpanded(treeNode, undefined);
     }
 
-    //RAQ - CHANGED setAttribute to aria-expanded
     setExpanded(treeNode: T, state: boolean)
     {
         const id = this._idByNode.get(treeNode);
@@ -292,7 +292,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             event.preventDefault();        
             console.log("inside of Enter/Space key, AFTER dispatching a mouse event");
 
-        this.onNodeKeyDown(event, treeNode);
+            this.onNodeSelected(event, treeNode);
         
         }
     //     if (event.code === "ArrowUp") {
@@ -301,16 +301,44 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     //     if (event.code === "ArrowDown") {
 
     //     }
-    //     if (event.code === "ArrowLeft") {
+        if (event.code === "ArrowLeft") {
 
-    //     }
+
+            event.preventDefault();
+
+
+            if (this.isExpanded(treeNode))
+            {
+                this.toggleExpanded(treeNode);
+            }
+
+            const treeNodeDiv = this.getElementByNode(treeNode) as HTMLElement;
+            console.log("getElementByNode:");
+            console.log(treeNodeDiv);
+
+            const parentOfTreeNode = treeNodeDiv.parentElement;
+            console.log("parentOfTreeNode:");
+            console.log(parentOfTreeNode);
+            //console.log(treeNode.getClasses());
+            //console.log("Name: " + treeNode.parent.displayName);
+            //console.log("Name try 2: " + treeNodeDiv.parentElement)
+
+            //go to the parent node of the currently open node
+            //let currClasses = treeNode.classList;
+
+            //console.log("classes: " + currClasses);
+            //const firstTreeNode = this.querySelector('[aria-expanded="true"]') as HTMLElement;
+            // console.log(firstTreeNode);
+            //firstTreeNode.focus();
+
+        }
         if (event.code === "ArrowRight") {
             console.log("reached here once ArrowRight was pressed!");
             event.preventDefault();
 
             if (this.isExpanded(treeNode))
             {
-                //if the node is alreadylibs/ff-ui/source/Tree.ts expanded - go to the first node
+                //if the node is already expanded - go to the first node
             }
             else
             {
@@ -324,11 +352,9 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             //shift focus to the node that has role="tree"
             console.log("reached here once home button was pressed!");
             event.preventDefault(); //prevents home button from performing its default function
-
-            const treeNodeByClass = document.getElementsByClassName("level-0")[0] as HTMLElement; //for TESTING to make sure it works
-            const treeNodeByRole = document.querySelector('[role="tree"]') as HTMLElement; //go to the first element with the role="tree" - should be the current active one? 
-            //does this work if the navigation panel is open and we are in the task menu? (test it!)
-            //it DOES select the tree in the navigation panel - find a way to select the CURRENT tree            
+            //get the local element - getting it in context to 
+            //this.getChildrenArray().[0]
+            const treeNodeByClass = this.getElementsByClassName("level-0")[0] as HTMLElement;   
 
             console.log(treeNodeByClass);
 
@@ -472,7 +498,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     {
     }
 
-    protected onNodeKeyDown(even: KeyboardEvent, treeNode: T) 
+    protected onNodeSelected(even: KeyboardEvent, treeNode: T) 
     {
         //this.toggleExpanded(treeNode);
     }

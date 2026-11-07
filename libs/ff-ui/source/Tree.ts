@@ -284,6 +284,11 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         console.log("made it into the function onKeyDown! Key Pressed: " + event.code.toString());
 
         const treeNode = this.getNodeFromEventTarget(event);
+
+        const treeNodeDiv = this.getElementByNode(treeNode) as HTMLElement;
+
+        console.log(treeNode);
+        console.log(treeNodeDiv);
         //event codes based on the keyboard event code values
         if (event.code === "Space" || event.code === "Enter") {
 
@@ -305,18 +310,16 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         {
             event.preventDefault();
 
-            const treeNodeDiv = this.getElementByNode(treeNode) as HTMLElement;
-
-            if (treeNodeDiv.classList.contains("ff-leaf"))
+            if (treeNodeDiv.classList.contains("ff-leaf")) //if current node is leaf node (not toggle)
             {
                 const parentTreeNodeDiv = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;
                 parentTreeNodeDiv.focus();
             }
-            else if (this.isExpanded(treeNode))
+            else if (this.isExpanded(treeNode)) //if current node is a toggle node that is OPENED
             {
                 this.toggleExpanded(treeNode);
             }
-            else if (treeNodeDiv.classList.contains("ff-inner") && !treeNodeDiv.classList.contains("level-0"))
+            else if (treeNodeDiv.classList.contains("ff-inner") && !treeNodeDiv.classList.contains("level-0")) //if current node is a toggle node that is CLOSED and is NOT root node
             {
                 const parentTreeNodeDiv = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;
                 parentTreeNodeDiv.focus();
@@ -327,9 +330,14 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             console.log("reached here once ArrowRight was pressed!");
             event.preventDefault();
 
-            if (this.isExpanded(treeNode))
+
+            if (treeNodeDiv.classList.contains("ff-inner") && this.isExpanded(treeNode)) //if node is expanded and is a TOGGLED node
             {
-                //if the node is already expanded - go to the first node
+                const firstChildInArray = this.getElementByNode(this.getChildren(treeNode)[0]) as HTMLElement;
+                
+                const firstChildNode = firstChildInArray.children[0] as HTMLElement;
+
+                firstChildNode.focus();
             }
             else
             {

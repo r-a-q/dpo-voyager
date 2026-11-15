@@ -268,6 +268,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             GENERATE A CLICK FROM A KEYDOWN EVENT (COPY THE CODE FROM FF-BUTTON TO SIMULATE A CLICK. IF CLICK IS SIMULATED, CALL THE ONCLICK FUNCTION)
             @keydown=${this.onKeyDown}
          */
+        //By default, expanded is true and selected is false
         return html`
             <div class="ff-tree-node-container">
                 <div role="treeitem" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded} aria-expanded="true" aria-selected="false">
@@ -289,6 +290,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
 
         console.log(treeNode);
         console.log(treeNodeDiv);
+
         //event codes based on the keyboard event code values
         if (event.code === "Space" || event.code === "Enter") {
 
@@ -303,9 +305,31 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     //     if (event.code === "ArrowUp") {
 
     //     }
-    //     if (event.code === "ArrowDown") {
+        if (event.code === "ArrowDown") {
 
-    //     }
+            event.preventDefault();
+
+            let parent;
+
+            if (treeNodeDiv.children[0].classList.contains("level-0")) { //root node
+
+                parent = treeNodeDiv.children[0] as HTMLElement;
+
+            }
+            else if (treeNodeDiv.classList.contains("ff-inner") && this.isExpanded(treeNode)) { //expanded toggle node
+
+                parent = treeNodeDiv.children[0] as HTMLElement;
+
+            }
+            else { //leaf or closed toggle node
+
+                parent = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;       
+
+            }
+
+            this.moveToNextNode(parent, treeNode);
+
+        }
         if (event.code === "ArrowLeft") 
         {
             event.preventDefault();
@@ -330,16 +354,16 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             console.log("reached here once ArrowRight was pressed!");
             event.preventDefault();
 
-
+//figure out what position i am in now 
             if (treeNodeDiv.classList.contains("ff-inner") && this.isExpanded(treeNode)) //if node is expanded and is a TOGGLED node
             {
                 const firstChildInArray = this.getElementByNode(this.getChildren(treeNode)[0]) as HTMLElement;
-                
+
                 const firstChildNode = firstChildInArray.children[0] as HTMLElement;
 
                 firstChildNode.focus();
             }
-            else
+            else if (treeNodeDiv.classList.contains("ff-inner") && !this.isExpanded(treeNode)) 
             {
                 //expand the node
                 this.toggleExpanded(treeNode);
@@ -360,19 +384,106 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             treeNodeByClass.focus();
         }
         // if (event.code === "End") {
-        //     //shift focus to the node that has role="tree"
+        //     //shift focus to the node that has role="tree" and find its last child
+        //     event.preventDefault();
+
+        //     const treeNodeByClass = this.getElementsByClassName()
         // } 
     }
 
-    // protected visible ()
-    // {
+    protected moveToNextNode (parent: HTMLElement, treeNode: T)
+    {
+        console.log("parent of current node:");
+        console.log(parent);
 
-    // }
+        const parentNode = this.getNodeByElement(parent);
+
+        console.log("children array:");
+
+        const childrenArray = this.getChildren(parentNode);
+        console.log(childrenArray);
+
+        const childrenIDs = childrenArray.map((obj) => this._idByNode.get(obj));
+        console.log("array of children id's:");
+        console.log(childrenIDs);
+
+        const currIndex = childrenIDs.indexOf(this._idByNode.get(treeNode));
+        console.log("index of current node: " + currIndex);
+
+        if (currIndex + 1 == childrenIDs.length) { //last child
+            console.log("last child in array!");
+
+            const containerParent = parent.parentElement.parentElement as HTMLElement;
+            console.log("containerParent:");
+            console.log(containerParent);
+
+            console.log("containerParent sibling:");
+            console.log(containerParent.nextElementSibling)
+
+            if (containerParent.nextElementSibling) {
+                const parentSibling = containerParent.nextElementSibling as HTMLElement;
+                console.log("parentSibling focus:");
+                console.log(parentSibling);
+
+                const nextNode = parentSibling.children[0].children[0] as HTMLElement;
+                console.log("nextNode");
+                console.log(nextNode);
+                nextNode.focus();
+            }
+        }
+        else {
+            const nextNodeIndex = currIndex + 1;
+
+            const nextNodeDiv = this.getElementByNode(childrenArray[nextNodeIndex]) as HTMLElement;
+
+            console.log("next node div:");
+            console.log(nextNodeDiv);
+
+            console.log("children of next node:");
+            console.log(nextNodeDiv.children[0]);
+
+            const nextNode = nextNodeDiv.children[0] as HTMLElement;
+            nextNode.focus();
+        }
+    }
+
+    protected isVisible (treeNodeDiv: HTMLElement): boolean
+    {
+        console.log("is the tree node visible:");
+
+        if (treeNodeDiv.firstElementChild.classList.contains("level-0")) //this is the ROOT tree node - will be visible!
+        {
+            console.log("root node - is Visible!");
+            return true;
+        }
+        // if (treeNodeDiv.classList.contains("ff-inner")) //if treeNode is a the root node 
+        // {
+        //     console.log("true");
+        //     return true;
+        // }
+        else //will only pass "ff-leaf" or "ff-inner"
+        {
+            //find the parent node of ff-leaf
+            const parentTreeNodeDiv = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;
+
+            console.log("treeNodeDiv:");
+            console.log(treeNodeDiv);
+
+            //if parent toggle node is expanded, then the ff-leaf is visible. if not expanded, ff-leaf is not visible
+            console.log(parentTreeNodeDiv.hasAttribute('expanded'));
+            return parentTreeNodeDiv.hasAttribute('expanded');
+        }
+    }
     
     // protected isExpandable(treeNode: T)
     // {
     //     return treeNode.hasAttribute("aria-expanded");
     // }
+
+    protected nodeRecords()
+    {
+        //static record = 10;
+    }
 
     protected onDragStart(event: DragEvent)
     {
@@ -511,6 +622,15 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
         }
 
         return target && this._nodeById[target.id];
+    }
+
+    protected getNodeByElement(element: HTMLElement): T
+    {
+        while (element && !element.classList.contains("ff-tree-node")) {
+            element = element == this ? null : element.parentElement;
+        }
+        
+        return element && this._nodeById[element.id];
     }
 
     protected getElementByNode(treeNode: T)

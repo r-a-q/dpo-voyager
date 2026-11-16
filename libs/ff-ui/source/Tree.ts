@@ -124,7 +124,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     {
         this.classList.add("ff-tree");
         this.setAttribute("role", "tree");
-        this.setAttribute("tabindex", "0");
+        //this.setAttribute("tabindex", "0");
 
         if (this.draggable) {
             this.addEventListener("dragstart", this.onDragStart.bind(this));
@@ -273,7 +273,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             <div class="ff-tree-node-container">
                 <div role="treeitem" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded} aria-expanded=${expanded} aria-selected=${selected}>
                     <div class=${headerClasses} draggable="true"
-                        @click=${this.onClick} @dblclick=${this.onDblClick} @keydown=${this.onKeyDown} tabindex="-1">${header}</div>
+                        @click=${this.onClick} @dblclick=${this.onDblClick} @keydown=${this.onKeyDown} tabindex="0">${header}</div>
                     <div class="ff-content" role="group">${content}</div>
                 </div>
             </div>

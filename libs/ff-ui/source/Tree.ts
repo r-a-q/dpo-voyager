@@ -124,7 +124,7 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
     {
         this.classList.add("ff-tree");
         this.setAttribute("role", "tree");
-        this.setAttribute("tabindex", "-1");
+        this.setAttribute("tabindex", "0");
 
         if (this.draggable) {
             this.addEventListener("dragstart", this.onDragStart.bind(this));
@@ -268,12 +268,12 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             GENERATE A CLICK FROM A KEYDOWN EVENT (COPY THE CODE FROM FF-BUTTON TO SIMULATE A CLICK. IF CLICK IS SIMULATED, CALL THE ONCLICK FUNCTION)
             @keydown=${this.onKeyDown}
          */
-        //By default, expanded is true and selected is false
+        //By default, expanded is true and selected is false - aria-expanded and aria-selected don't work for leaf nodes, only works correctly for toggle nodes
         return html`
             <div class="ff-tree-node-container">
-                <div role="treeitem" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded} aria-expanded="true" aria-selected="false">
+                <div role="treeitem" class=${classes} id=${id} ?selected=${selected} ?expanded=${expanded} aria-expanded=${expanded} aria-selected=${selected}>
                     <div class=${headerClasses} draggable="true"
-                        @click=${this.onClick} @dblclick=${this.onDblClick} @keydown=${this.onKeyDown} tabindex="0">${header}</div>
+                        @click=${this.onClick} @dblclick=${this.onDblClick} @keydown=${this.onKeyDown} tabindex="-1">${header}</div>
                     <div class="ff-content" role="group">${content}</div>
                 </div>
             </div>
@@ -302,32 +302,82 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             this.onNodeSelected(event, treeNode);
         
         }
-    //     if (event.code === "ArrowUp") {
+        if (event.code === "ArrowUp") {
+            event.preventDefault();
 
-    //     }
+            //array holding all of the current visible nodes
+            let focusableNodes: HTMLElement[] = [];
+
+            //maybe pass the parent of the focusable node?
+            const rootNode = this.getElementsByClassName("level-0")[0].parentElement.parentElement.parentElement as HTMLElement;
+            //console.log(rootNode);
+            focusableNodes = this.visibleNodes(rootNode, focusableNodes);
+
+            //console.log(focusableNodes);
+
+
+            const currIndex = focusableNodes.indexOf(treeNodeDiv.children[0] as HTMLElement);
+            //console.log("currIndex: " + currIndex);
+            if (currIndex == 0) { //we are root node
+
+            }
+            else {
+                const nextNode = focusableNodes[currIndex - 1]; //previous visible node
+
+                //console.log("nextNode:" + nextNode);
+
+                nextNode.focus();
+
+            }
+        }
         if (event.code === "ArrowDown") {
 
             event.preventDefault();
 
-            let parent;
+            //array holding all of the current visible nodes
+            let focusableNodes: HTMLElement[] = [];
 
-            if (treeNodeDiv.children[0].classList.contains("level-0")) { //root node
+            //maybe pass the parent of the focusable node?
+            const rootNode = this.getElementsByClassName("level-0")[0].parentElement.parentElement.parentElement as HTMLElement;
+            //console.log(rootNode);
+            focusableNodes = this.visibleNodes(rootNode, focusableNodes);
 
-                parent = treeNodeDiv.children[0] as HTMLElement;
+            //console.log(focusableNodes);
+
+
+            const currIndex = focusableNodes.indexOf(treeNodeDiv.children[0] as HTMLElement);
+            //console.log("currIndex: " + currIndex);
+            if (currIndex + 1 == focusableNodes.length) { //we are the last visible element
 
             }
-            else if (treeNodeDiv.classList.contains("ff-inner") && this.isExpanded(treeNode)) { //expanded toggle node
+            else {
+                const nextNode = focusableNodes[currIndex + 1]; //previous visible node
 
-                parent = treeNodeDiv.children[0] as HTMLElement;
+                //console.log("nextNode:" + nextNode);
 
-            }
-            else { //leaf or closed toggle node
-
-                parent = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;       
+                nextNode.focus();
 
             }
 
-            this.moveToNextNode(parent, treeNode);
+            // let parent;
+
+            // if (treeNodeDiv.children[0].classList.contains("level-0")) { //root node
+
+            //     parent = treeNodeDiv.children[0] as HTMLElement;
+
+            // }
+            // else if (treeNodeDiv.classList.contains("ff-inner") && this.isExpanded(treeNode)) { //expanded toggle node
+
+            //     parent = treeNodeDiv.children[0] as HTMLElement;
+
+            // }
+            // else { //leaf or closed toggle node
+
+            //     parent = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;       
+
+            // }
+
+            // this.moveToNextNode(parent, treeNode);
 
         }
         if (event.code === "ArrowLeft") 
@@ -354,7 +404,6 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
             console.log("reached here once ArrowRight was pressed!");
             event.preventDefault();
 
-//figure out what position i am in now 
             if (treeNodeDiv.classList.contains("ff-inner") && this.isExpanded(treeNode)) //if node is expanded and is a TOGGLED node
             {
                 const firstChildInArray = this.getElementByNode(this.getChildren(treeNode)[0]) as HTMLElement;
@@ -383,51 +432,63 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
 
             treeNodeByClass.focus();
         }
-        // if (event.code === "End") {
-        //     //shift focus to the node that has role="tree" and find its last child
-        //     event.preventDefault();
+        if (event.code === "End") {
+            //shift focus to the node that has role="tree" and find its last child
+            event.preventDefault();
 
-        //     const treeNodeByClass = this.getElementsByClassName()
-        // } 
+            //array holding all of the current visible nodes
+            let focusableNodes: HTMLElement[] = [];
+
+            //maybe pass the parent of the focusable node?
+            const rootNode = this.getElementsByClassName("level-0")[0].parentElement.parentElement.parentElement as HTMLElement;
+            //console.log(rootNode);
+            focusableNodes = this.visibleNodes(rootNode, focusableNodes);
+
+            //console.log(focusableNodes);
+
+            const lastNode = focusableNodes[focusableNodes.length - 1];
+
+            lastNode.focus();
+        } 
     }
 
     protected moveToNextNode (parent: HTMLElement, treeNode: T)
     {
-        console.log("parent of current node:");
-        console.log(parent);
+        // console.log("parent of current node:");
+        // console.log(parent);
 
         const parentNode = this.getNodeByElement(parent);
 
-        console.log("children array:");
+        // console.log("children array:");
 
         const childrenArray = this.getChildren(parentNode);
-        console.log(childrenArray);
+        // console.log(childrenArray);
 
         const childrenIDs = childrenArray.map((obj) => this._idByNode.get(obj));
-        console.log("array of children id's:");
-        console.log(childrenIDs);
+        // console.log("array of children id's:");
+        // console.log(childrenIDs);
 
         const currIndex = childrenIDs.indexOf(this._idByNode.get(treeNode));
-        console.log("index of current node: " + currIndex);
+        // console.log("index of current node: " + currIndex);
 
         if (currIndex + 1 == childrenIDs.length) { //last child
-            console.log("last child in array!");
+            // console.log("last child in array!");
 
             const containerParent = parent.parentElement.parentElement as HTMLElement;
-            console.log("containerParent:");
-            console.log(containerParent);
+            // console.log("containerParent:");
+            // console.log(containerParent);
 
-            console.log("containerParent sibling:");
-            console.log(containerParent.nextElementSibling)
+            // console.log("containerParent sibling:");
+            // console.log(containerParent.nextElementSibling)
 
             if (containerParent.nextElementSibling) {
                 const parentSibling = containerParent.nextElementSibling as HTMLElement;
-                console.log("parentSibling focus:");
-                console.log(parentSibling);
+                // console.log("parentSibling focus:");
+                // console.log(parentSibling);
 
                 const nextNode = parentSibling.children[0].children[0] as HTMLElement;
-                console.log("nextNode");
-                console.log(nextNode);
+                // console.log("nextNode");
+                // console.log(nextNode);
                 nextNode.focus();
             }
         }
@@ -436,55 +497,93 @@ export default class Tree<T extends ITreeNode = ITreeNode> extends CustomElement
 
             const nextNodeDiv = this.getElementByNode(childrenArray[nextNodeIndex]) as HTMLElement;
 
-            console.log("next node div:");
-            console.log(nextNodeDiv);
+            // console.log("next node div:");
+            // console.log(nextNodeDiv);
 
-            console.log("children of next node:");
-            console.log(nextNodeDiv.children[0]);
+            // console.log("children of next node:");
+            // console.log(nextNodeDiv.children[0]);
 
             const nextNode = nextNodeDiv.children[0] as HTMLElement;
             nextNode.focus();
         }
     }
 
-    protected isVisible (treeNodeDiv: HTMLElement): boolean
+    //array containing the current order of all visible nodes
+    protected visibleNodes(currNode: HTMLElement, visibleNodes: HTMLElement[]) : HTMLElement[] //make sure that it works for the settings tab
     {
-        console.log("is the tree node visible:");
+        let contentContainer; //holds array of children
 
-        if (treeNodeDiv.firstElementChild.classList.contains("level-0")) //this is the ROOT tree node - will be visible!
-        {
-            console.log("root node - is Visible!");
-            return true;
+        if (!currNode.classList.contains("ff-tree")) { //if we are not the root node
+            visibleNodes.push(currNode); //push focusable html element into the array
+
+            contentContainer = currNode.nextElementSibling.children;
         }
-        // if (treeNodeDiv.classList.contains("ff-inner")) //if treeNode is a the root node 
-        // {
-        //     console.log("true");
-        //     return true;
-        // }
-        else //will only pass "ff-leaf" or "ff-inner"
-        {
-            //find the parent node of ff-leaf
-            const parentTreeNodeDiv = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;
-
-            console.log("treeNodeDiv:");
-            console.log(treeNodeDiv);
-
-            //if parent toggle node is expanded, then the ff-leaf is visible. if not expanded, ff-leaf is not visible
-            console.log(parentTreeNodeDiv.hasAttribute('expanded'));
-            return parentTreeNodeDiv.hasAttribute('expanded');
+        else { //root node was passed, get children of the root node
+            contentContainer = currNode.children;
         }
+        //console.log(currNode);
+        
+        //console.log(visibleNodes);
+
+        
+        //console.log("content container:");
+        //console.log(contentContainer);
+
+        if (contentContainer.length < 0) { //if the content container is empty - no children
+            return;
+        }
+        
+        for (const child of contentContainer) {
+            const workableNodeDiv = child.children[0] as HTMLElement; //come up with a better name than workableNodeDiv
+            //console.log(workableNodeDiv);
+            //console.log(workableNodeDiv.classList.contains("ff-inner"));
+            const isToggleNode = workableNodeDiv.classList.contains("ff-inner");
+            const isNodeExpanded = this.isExpanded(this.getNodeByElement(workableNodeDiv));
+
+            //console.log("isToggleNode:" + isToggleNode);
+            //console.log("isNodeExpanded:" + isNodeExpanded);
+
+            const focusableNodeDiv = workableNodeDiv.children[0] as HTMLElement;
+
+            if (isToggleNode && isNodeExpanded) {
+                this.visibleNodes(focusableNodeDiv, visibleNodes); //pass on the focusable div
+            }
+            else {
+                visibleNodes.push(focusableNodeDiv);
+            }
+        }
+
+        return visibleNodes;
     }
-    
-    // protected isExpandable(treeNode: T)
+
+    // protected isVisible (treeNodeDiv: HTMLElement): boolean
     // {
-    //     return treeNode.hasAttribute("aria-expanded");
+    //     console.log("is the tree node visible:");
+
+    //     if (treeNodeDiv.firstElementChild.classList.contains("level-0")) //this is the ROOT tree node - will be visible!
+    //     {
+    //         console.log("root node - is Visible!");
+    //         return true;
+    //     }
+    //     // if (treeNodeDiv.classList.contains("ff-inner")) //if treeNode is a the root node 
+    //     // {
+    //     //     console.log("true");
+    //     //     return true;
+    //     // }
+    //     else //will only pass "ff-leaf" or "ff-inner"
+    //     {
+    //         //find the parent node of ff-leaf
+    //         const parentTreeNodeDiv = treeNodeDiv.parentElement.parentElement.previousElementSibling as HTMLElement;
+
+    //         console.log("treeNodeDiv:");
+    //         console.log(treeNodeDiv);
+
+    //         //if parent toggle node is expanded, then the ff-leaf is visible. if not expanded, ff-leaf is not visible
+    //         console.log(parentTreeNodeDiv.hasAttribute('expanded'));
+    //         return parentTreeNodeDiv.hasAttribute('expanded');
+    //     }
     // }
-
-    protected nodeRecords()
-    {
-        //static record = 10;
-    }
-
+    
     protected onDragStart(event: DragEvent)
     {
         const treeNode = this.getNodeFromEventTarget(event);
